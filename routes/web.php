@@ -18,9 +18,7 @@ Route::get('/', fn() => view('home'))->name('home');
 
 // Leitura pública de serviços e produtos (visitantes podem navegar)
 Route::get('/servicos',          [ServicoController::class, 'index'])->name('servicos.index');
-Route::get('/servicos/{servico}',[ServicoController::class, 'show'])->name('servicos.show');
 Route::get('/produtos',          [ProdutoController::class, 'index'])->name('produtos.index');
-Route::get('/produtos/{produto}',[ProdutoController::class, 'show'])->name('produtos.show');
 
 // ---------------------------------------------------
 // Autenticação
@@ -80,3 +78,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('usuarios', UsuarioController::class);
     });
 });
+
+Route::get('/servicos/{servico}',[ServicoController::class, 'show'])->name('servicos.show');
+Route::get('/produtos/{produto}',[ProdutoController::class, 'show'])->name('produtos.show');
+

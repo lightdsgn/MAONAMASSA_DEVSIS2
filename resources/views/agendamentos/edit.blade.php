@@ -7,41 +7,7 @@
 <div class="card p-4">
     <form action="{{ route('agendamentos.update', $agendamento) }}" method="POST">
         @csrf @method('PUT')
-        @if(Auth::user()->isCliente())
-        <div class="row g-3">
-            <div class="col-12">
-                <label class="form-label fw-semibold">Serviço</label>
-                <input type="text" class="form-control" value="{{ $agendamento->servico->titulo }}" disabled>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-semibold">Data</label>
-                <input type="date" name="data" class="form-control" value="{{ $agendamento->data }}">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-semibold">Horário</label>
-                <input type="time" name="horario" class="form-control" value="{{ $agendamento->horario }}">
-            </div>
-            <div class="col-12">
-                <label class="form-label fw-semibold">Observações</label>
-                <textarea name="observacoes" class="form-control" rows="3">{{ $agendamento->observacoes }}</textarea>
-            </div>
-        </div>
-        @else
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label class="form-label fw-semibold">Serviço</label>
-                <input type="text" class="form-control" value="{{ $agendamento->servico->titulo }}" disabled>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-semibold">Status</label>
-                <select name="status" class="form-select">
-                    @foreach(['pendente','confirmado','concluido','cancelado'] as $st)
-                    <option value="{{ $st }}" {{ $agendamento->status === $st ? 'selected' : '' }}>{{ ucfirst($st) }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        @endif
+        @include('agendamentos._form', ['agendamento' => $agendamento, 'servicos' => $servicos ?? [], 'servico_id' => $servico_id ?? null])
         <div class="mt-4">
             <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
         </div>

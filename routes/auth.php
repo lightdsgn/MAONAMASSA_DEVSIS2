@@ -1,5 +1,9 @@
 <?php
 
+// Este arquivo contém as rotas padrão do Breeze, mas esta aplicação usa rotas personalizadas em routes/web.php.
+// Se este arquivo for carregado, ele entrará em conflito com as rotas /login e /logout já definidas.
+return;
+
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
