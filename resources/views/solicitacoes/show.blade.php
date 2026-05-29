@@ -42,6 +42,25 @@
                     {{ ucfirst($orc->status) }}
                 </span>
                 @if($orc->observacoes)<p class="mt-2 text-muted small">{{ $orc->observacoes }}</p>@endif
+
+                @if(Auth::id() === $solicitacao->usuario_id && $orc->status === 'pendente')
+                    <div class="d-flex gap-2 mt-3">
+                        <form action="{{ route('orcamentos.aceitar', $orc) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-success">Aceitar Orçamento</button>
+                        </form>
+                        <form action="{{ route('orcamentos.recusar', $orc) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-danger">Recusar Orçamento</button>
+                        </form>
+                    </div>
+                @endif
+
+                @if(Auth::id() === $solicitacao->usuario_id && $orc->status === 'aceito')
+                    <a href="{{ route('agendamentos.create') }}" class="btn btn-sm btn-primary mt-3">
+                        <i class="bi bi-calendar-plus me-1"></i>Agendar Serviço
+                    </a>
+                @endif
             @else
                 <p class="text-muted">Sem orçamento ainda.</p>
                 @if(Auth::user()->isPrestador() || Auth::user()->isAdm())

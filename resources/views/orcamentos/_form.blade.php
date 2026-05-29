@@ -32,11 +32,16 @@
     </div>
     <div class="col-md-4">
         <label class="form-label fw-semibold">Status</label>
+        @if(Auth::user()->isAdm())
         <select name="status" class="form-select">
             @foreach(['pendente','aceito','recusado'] as $st)
             <option value="{{ $st }}" {{ old('status', $orcamento->status ?? 'pendente') === $st ? 'selected' : '' }}>{{ ucfirst($st) }}</option>
             @endforeach
         </select>
+        @else
+        <input type="text" class="form-control" value="{{ ucfirst($orcamento->status ?? 'pendente') }}" disabled>
+        <input type="hidden" name="status" value="{{ old('status', $orcamento->status ?? 'pendente') }}">
+        @endif
     </div>
     <div class="col-12">
         <label class="form-label fw-semibold">Observações</label>

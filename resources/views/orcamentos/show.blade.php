@@ -20,6 +20,18 @@
                 {{ ucfirst($orcamento->status) }}
             </span>
         </div>
+        @if(Auth::id() === $orcamento->solicitacao->usuario_id && $orcamento->status === 'pendente')
+        <div class="col-12 mt-3">
+            <form action="{{ route('orcamentos.aceitar', $orcamento) }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-success btn-sm me-2">Aceitar Orçamento</button>
+            </form>
+            <form action="{{ route('orcamentos.recusar', $orcamento) }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-danger btn-sm">Recusar Orçamento</button>
+            </form>
+        </div>
+        @endif
         @if($orcamento->observacoes)
         <div class="col-12"><strong>Observações:</strong><p class="text-muted mt-1">{{ $orcamento->observacoes }}</p></div>
         @endif

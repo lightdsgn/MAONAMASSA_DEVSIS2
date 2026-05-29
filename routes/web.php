@@ -63,6 +63,10 @@ Route::middleware('auth')->group(function () {
 
     // Orçamentos
     Route::resource('orcamentos', OrcamentoController::class);
+    Route::post('/orcamentos/{orcamento}/aceitar', [OrcamentoController::class, 'aceitar'])
+        ->name('orcamentos.aceitar');
+    Route::post('/orcamentos/{orcamento}/recusar', [OrcamentoController::class, 'recusar'])
+        ->name('orcamentos.recusar');
 
     // Agendamentos
     Route::resource('agendamentos', AgendamentoController::class);

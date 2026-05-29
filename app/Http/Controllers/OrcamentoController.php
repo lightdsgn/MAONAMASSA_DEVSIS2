@@ -16,6 +16,13 @@ class OrcamentoController extends Controller
         }
     }
 
+    private function checkCliente()
+    {
+        if (Auth::user()->tipo !== 'cliente' && Auth::user()->tipo !== 'adm') {
+            abort(403, 'Acesso negado.');
+        }
+    }
+
     public function index(Request $request)
     {
         $busca = $request->busca;
@@ -45,11 +52,11 @@ class OrcamentoController extends Controller
             'valor_total'    => 'required|numeric|min:0',
             'prazo'          => 'required|integer|min:1',
             'observacoes'    => 'nullable|string',
-            'status'         => 'required|in:pendente,aceito,recusado',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['solicitacao_id', 'mao_de_obra', 'valor_total', 'prazo', 'observacoes']);
         $data['usuario_id'] = Auth::id();
+        $data['status'] = 'pendente';
 
         Orcamento::create($data);
         return redirect()->route('orcamentos.index')->with('sucesso', 'Orçamento cadastrado!');
@@ -78,17 +85,59 @@ class OrcamentoController extends Controller
             abort(403, 'Você não pode editar o orçamento de outro prestador.');
         }
 
-        $request->validate([
+        $rules = [
             'solicitacao_id' => 'required|exists:solicitacoes,id|unique:orcamentos,solicitacao_id,' . $orcamento->id,
             'mao_de_obra'    => 'required|numeric|min:0',
             'valor_total'    => 'required|numeric|min:0',
             'prazo'          => 'required|integer|min:1',
             'observacoes'    => 'nullable|string',
-            'status'         => 'required|in:pendente,aceito,recusado',
-        ]);
+        ];
 
-        $orcamento->update($request->all());
+        if (Auth::user()->isAdm()) {
+            $rules['status'] = 'required|in:pendente,aceito,recusado';
+        }
+
+        $request->validate($rules);
+
+        $data = $request->only(['solicitacao_id', 'mao_de_obra', 'valor_total', 'prazo', 'observacoes']);
+        if (Auth::user()->isAdm()) {
+            $data['status'] = $request->status;
+        }
+
+        $orcamento->update($data);
         return redirect()->route('orcamentos.index')->with('sucesso', 'Orçamento atualizado!');
+    }
+
+    public function aceitar(Orcamento $orcamento)
+    {
+        $this->checkCliente();
+        if (Auth::id() !== $orcamento->solicitacao->usuario_id && !Auth::user()->isAdm()) {
+            abort(403, 'Você não pode aceitar este orçamento.');
+        }
+        if ($orcamento->status !== 'pendente') {
+            return back()->with('erro', 'Orçamento já foi respondido.');
+        }
+
+        $orcamento->update(['status' => 'aceito']);
+        $orcamento->solicitacao->update(['status' => 'em_andamento']);
+
+        return redirect()->route('orcamentos.show', $orcamento)->with('sucesso', 'Orçamento aceito!');
+    }
+
+    public function recusar(Orcamento $orcamento)
+    {
+        $this->checkCliente();
+        if (Auth::id() !== $orcamento->solicitacao->usuario_id && !Auth::user()->isAdm()) {
+            abort(403, 'Você não pode recusar este orçamento.');
+        }
+        if ($orcamento->status !== 'pendente') {
+            return back()->with('erro', 'Orçamento já foi respondido.');
+        }
+
+        $orcamento->update(['status' => 'recusado']);
+        $orcamento->solicitacao->update(['status' => 'cancelada']);
+
+        return redirect()->route('orcamentos.show', $orcamento)->with('sucesso', 'Orçamento recusado!');
     }
 
     public function destroy(Orcamento $orcamento)

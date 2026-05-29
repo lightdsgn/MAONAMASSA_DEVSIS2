@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Agendamento;
+use App\Models\Orcamento;
 use App\Models\Servico;
 
 class AgendamentoController extends Controller
@@ -34,19 +35,45 @@ class AgendamentoController extends Controller
 
     public function create(Request $request)
     {
+        if (!Auth::user()->isCliente()) {
+            abort(403, 'Acesso negado.');
+        }
+
         $servico_id = $request->servico_id;
-        $servicos   = Servico::where('status', 'ativo')->get();
+        $prestadoresComOrcamento = Orcamento::where('status', 'aceito')
+            ->whereHas('solicitacao', fn($q) => $q->where('usuario_id', Auth::id()))
+            ->pluck('usuario_id')
+            ->unique();
+
+        $servicos = Servico::where('status', 'ativo')
+            ->whereIn('usuario_id', $prestadoresComOrcamento)
+            ->get();
+
         return view('agendamentos.create', compact('servicos', 'servico_id'));
     }
 
     public function store(Request $request)
     {
+        if (!Auth::user()->isCliente()) {
+            abort(403, 'Acesso negado.');
+        }
+
         $request->validate([
             'servico_id'  => 'required|exists:servicos,id',
             'data'        => 'required|date|after_or_equal:today',
             'horario'     => 'required',
             'observacoes' => 'nullable|string|max:500',
         ]);
+
+        $servico = Servico::findOrFail($request->servico_id);
+        $temOrcamentoAceito = Orcamento::where('status', 'aceito')
+            ->where('usuario_id', $servico->usuario_id)
+            ->whereHas('solicitacao', fn($q) => $q->where('usuario_id', Auth::id()))
+            ->exists();
+
+        if (! $temOrcamentoAceito) {
+            return back()->withErrors(['servico_id' => 'Você deve aceitar um orçamento deste prestador antes de agendar um serviço.']);
+        }
 
         Agendamento::create([
             'cliente_id'  => Auth::id(),

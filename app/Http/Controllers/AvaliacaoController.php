@@ -33,13 +33,26 @@ class AvaliacaoController extends Controller
 
     public function create(Request $request)
     {
+        if (!Auth::user()->isCliente()) {
+            abort(403, 'Acesso negado.');
+        }
+
         $servico_id = $request->servico_id;
-        $servicos   = Servico::where('status', 'ativo')->get();
+        $servicos   = Servico::where('status', 'ativo')
+            ->whereHas('agendamentos', function ($query) {
+                $query->where('cliente_id', Auth::id())
+                      ->where('status', 'concluido');
+            })->get();
+
         return view('avaliacoes.create', compact('servicos', 'servico_id'));
     }
 
     public function store(Request $request)
     {
+        if (!Auth::user()->isCliente()) {
+            abort(403, 'Acesso negado.');
+        }
+
         $request->validate([
             'servico_id'  => 'required|exists:servicos,id',
             'nota'        => 'required|integer|min:1|max:5',
@@ -52,6 +65,16 @@ class AvaliacaoController extends Controller
 
         if ($jaAvaliou) {
             return back()->withErrors(['servico_id' => 'Você já avaliou este serviço.']);
+        }
+
+        $temAgendamentoConcluido = Servico::where('id', $request->servico_id)
+            ->whereHas('agendamentos', function ($query) {
+                $query->where('cliente_id', Auth::id())
+                      ->where('status', 'concluido');
+            })->exists();
+
+        if (! $temAgendamentoConcluido) {
+            return back()->withErrors(['servico_id' => 'Você só pode avaliar serviços com agendamento concluído.']);
         }
 
         Avaliacao::create([
