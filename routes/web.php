@@ -70,6 +70,9 @@ Route::middleware('auth')->group(function () {
 
     // Agendamentos
     Route::resource('agendamentos', AgendamentoController::class);
+    Route::post('/agendamentos/{agendamento}/aceitar', [AgendamentoController::class, 'aceitar'])->name('agendamentos.aceitar');
+    Route::post('/agendamentos/{agendamento}/recusar', [AgendamentoController::class, 'recusar'])->name('agendamentos.recusar');
+    Route::post('/agendamentos/{agendamento}/concluir', [AgendamentoController::class, 'concluir'])->name('agendamentos.concluir');
 
     // Avaliações
     Route::resource('avaliacoes', AvaliacaoController::class)->except(['edit', 'update']);

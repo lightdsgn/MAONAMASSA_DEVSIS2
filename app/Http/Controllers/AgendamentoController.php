@@ -55,30 +55,15 @@ class AgendamentoController extends Controller
         }
 
         $servico = Servico::findOrFail($request->servico_id);
-        $temOrcamentoAceito = Orcamento::where('status', 'aceito')
-            ->where('usuario_id', $servico->usuario_id)
-            ->whereHas('solicitacao', fn($q) => $q->where('usuario_id', Auth::id()))
-            ->exists();
 
-        if (! $temOrcamentoAceito) {
-            return back()->withErrors(['servico_id' => 'Você deve aceitar um orçamento deste prestador antes de agendar um serviço.']);
-        }
-
-        // Vincula o agendamento ao orçamento aceito (o mais recente) quando existir.
-        $orcamento = Orcamento::where('status', 'aceito')
-            ->where('usuario_id', $servico->usuario_id)
-            ->whereHas('solicitacao', fn($q) => $q->where('usuario_id', Auth::id()))
-            ->orderByDesc('id')
-            ->first();
-
+        // Temporariamente: remover fluxo de orçamentos — permitir agendamento direto
         Agendamento::create([
-            'cliente_id'   => Auth::id(),
-            'servico_id'   => $request->servico_id,
-            'orcamento_id' => $orcamento?->id,
-            'data'         => $request->data,
-            'horario'      => $request->horario,
-            'observacoes'  => $request->observacoes,
-            'status'       => 'pendente',
+            'cliente_id'  => Auth::id(),
+            'servico_id'  => $request->servico_id,
+            'data'        => $request->data,
+            'horario'     => $request->horario,
+            'observacoes' => $request->observacoes,
+            'status'      => 'pendente',
         ]);
 
         return redirect()->route('agendamentos.index')->with('sucesso', 'Agendamento realizado com sucesso!');
@@ -125,6 +110,43 @@ class AgendamentoController extends Controller
         $this->authorize($agendamento);
         $agendamento->delete();
         return redirect()->route('agendamentos.index')->with('sucesso', 'Agendamento cancelado!');
+    }
+
+    public function aceitar(Agendamento $agendamento)
+    {
+        $user = Auth::user();
+        if (! $user->isPrestador() || $agendamento->servico->usuario_id !== $user->id) {
+            abort(403, 'Acesso negado.');
+        }
+
+        $agendamento->update(['status' => 'confirmado']);
+        return back()->with('sucesso', 'Agendamento confirmado.');
+    }
+
+    public function recusar(Agendamento $agendamento)
+    {
+        $user = Auth::user();
+        if (! $user->isPrestador() || $agendamento->servico->usuario_id !== $user->id) {
+            abort(403, 'Acesso negado.');
+        }
+
+        $agendamento->update(['status' => 'cancelado']);
+        return back()->with('sucesso', 'Agendamento recusado.');
+    }
+
+    public function concluir(Agendamento $agendamento)
+    {
+        $user = Auth::user();
+        if (! $user->isCliente() || $agendamento->cliente_id !== $user->id) {
+            abort(403, 'Acesso negado.');
+        }
+
+        if ($agendamento->status !== 'confirmado') {
+            return back()->withErrors(['status' => 'Só é possível confirmar a execução após o prestador aceitar o agendamento.']);
+        }
+
+        $agendamento->update(['status' => 'concluido']);
+        return back()->with('sucesso', 'Serviço confirmado como concluído.');
     }
 
     private function authorize(Agendamento $agendamento): void

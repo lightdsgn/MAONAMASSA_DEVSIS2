@@ -1,0 +1,12 @@
+Resumo rápido do fluxo implementado:
+
+- Ajustamos o fluxo de agendamento para o cliente poder criar sem depender de orçamento.
+- Adicionamos validação via `StoreAgendamentoRequest` e `orcamento_id` no modelo/migration, mas não usamos no fluxo atual.
+- Criamos ações de prestador: aceitar ou recusar agendamento com confirmação.
+- Criamos ação de cliente: confirmar execução do serviço após o prestador aceitar.
+
+Próximos passos:
+
+- Revisar UI/UX dos avisos de status e mensagens de sucesso.
+- Testar o fluxo completo de cliente/prestador na aplicação.
+- Opcional: voltar a incluir orçamentos quando quiser reativar esse fluxo.
