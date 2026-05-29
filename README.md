@@ -148,3 +148,8 @@ resources/views/
 ├── avaliacoes/{index,create}.blade.php
 └── usuarios/{index,show,create,edit,perfil}.blade.php
 ```
+## Passo a passo para git
+1. git pull              # Atualizar com mudanças remotas
+2. git add .             # Adicionar suas mudanças
+3. git commit -m "msg"   # Criar um commit com mensagem
+4. git push              # Enviar para o repositório remoto
