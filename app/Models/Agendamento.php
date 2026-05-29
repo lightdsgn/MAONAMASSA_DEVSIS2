@@ -9,7 +9,7 @@ class Agendamento extends Model
     protected $table = 'agendamentos';
 
     protected $fillable = [
-        'cliente_id', 'servico_id', 'data', 'horario', 'status', 'observacoes',
+        'cliente_id', 'servico_id', 'orcamento_id', 'data', 'horario', 'status', 'observacoes',
     ];
 
     public function cliente()
@@ -25,5 +25,10 @@ class Agendamento extends Model
     public function pagamento()
     {
         return $this->hasOne(Pagamento::class);
+    }
+
+    public function orcamento()
+    {
+        return $this->belongsTo(Orcamento::class);
     }
 }

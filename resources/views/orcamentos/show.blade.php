@@ -42,6 +42,18 @@
                 <i class="bi bi-pencil me-1"></i>Editar
             </a>
         @endif
+        @if(Auth::id() === $orcamento->solicitacao->usuario_id && $orcamento->status === 'aceito')
+            @php $servDefault = $orcamento->usuario->servicos()->where('status', 'ativo')->first(); @endphp
+            @if($servDefault)
+                <a href="{{ route('agendamentos.create', ['servico_id' => $servDefault->id, 'orcamento_id' => $orcamento->id]) }}" class="btn btn-primary">
+                    <i class="bi bi-calendar-plus me-1"></i>Agendar Serviço
+                </a>
+            @else
+                <a href="{{ route('agendamentos.create', ['orcamento_id' => $orcamento->id]) }}" class="btn btn-primary">
+                    <i class="bi bi-calendar-plus me-1"></i>Agendar Serviço
+                </a>
+            @endif
+        @endif
     </div>
 </div>
 @endsection

@@ -40,30 +40,19 @@ class AgendamentoController extends Controller
         }
 
         $servico_id = $request->servico_id;
-        $prestadoresComOrcamento = Orcamento::where('status', 'aceito')
-            ->whereHas('solicitacao', fn($q) => $q->where('usuario_id', Auth::id()))
-            ->pluck('usuario_id')
-            ->unique();
+        $orcamento_id = $request->orcamento_id;
+        // Mostrar todos os serviços ativos no select (lista de exploração).
+        // A validação que exige orçamento aceito permanece no `store`.
+        $servicos = Servico::where('status', 'ativo')->get();
 
-        $servicos = Servico::where('status', 'ativo')
-            ->whereIn('usuario_id', $prestadoresComOrcamento)
-            ->get();
-
-        return view('agendamentos.create', compact('servicos', 'servico_id'));
+        return view('agendamentos.create', compact('servicos', 'servico_id', 'orcamento_id'));
     }
 
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StoreAgendamentoRequest $request)
     {
-        if (!Auth::user()->isCliente()) {
+        if (! Auth::user()->isCliente()) {
             abort(403, 'Acesso negado.');
         }
-
-        $request->validate([
-            'servico_id'  => 'required|exists:servicos,id',
-            'data'        => 'required|date|after_or_equal:today',
-            'horario'     => 'required',
-            'observacoes' => 'nullable|string|max:500',
-        ]);
 
         $servico = Servico::findOrFail($request->servico_id);
         $temOrcamentoAceito = Orcamento::where('status', 'aceito')
@@ -75,13 +64,21 @@ class AgendamentoController extends Controller
             return back()->withErrors(['servico_id' => 'Você deve aceitar um orçamento deste prestador antes de agendar um serviço.']);
         }
 
+        // Vincula o agendamento ao orçamento aceito (o mais recente) quando existir.
+        $orcamento = Orcamento::where('status', 'aceito')
+            ->where('usuario_id', $servico->usuario_id)
+            ->whereHas('solicitacao', fn($q) => $q->where('usuario_id', Auth::id()))
+            ->orderByDesc('id')
+            ->first();
+
         Agendamento::create([
-            'cliente_id'  => Auth::id(),
-            'servico_id'  => $request->servico_id,
-            'data'        => $request->data,
-            'horario'     => $request->horario,
-            'observacoes' => $request->observacoes,
-            'status'      => 'pendente',
+            'cliente_id'   => Auth::id(),
+            'servico_id'   => $request->servico_id,
+            'orcamento_id' => $orcamento?->id,
+            'data'         => $request->data,
+            'horario'      => $request->horario,
+            'observacoes'  => $request->observacoes,
+            'status'       => 'pendente',
         ]);
 
         return redirect()->route('agendamentos.index')->with('sucesso', 'Agendamento realizado com sucesso!');
