@@ -1,384 +1,649 @@
 @extends('layouts.app')
+
 @section('content')
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&display=swap');
 
-    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;900&display=swap');
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; font-family:'Sora',sans-serif; }
+html { scroll-behavior:smooth; }
+body { background:#fff; overflow-x:hidden; }
 
-    * { font-family: 'Sora', sans-serif;}
-    body{
-        background-color: #fff;
-    }
-    .navbar-nav .nav-link {
-    position: relative;
-    margin: 0 20px;
-    color: #fff;
-    font-weight: 500;
-    padding: 8px 0;
-    transition: 0.2s;
+@keyframes fadeUp {
+    from { opacity:0; transform:translateY(40px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeLeft {
+    from { opacity:0; transform:translateX(-40px); }
+    to   { opacity:1; transform:translateX(0); }
+}
+@keyframes fadeRight {
+    from { opacity:0; transform:translateX(40px); }
+    to   { opacity:1; transform:translateX(0); }
+}
+@keyframes scaleIn {
+    from { opacity:0; transform:scale(0.92); }
+    to   { opacity:1; transform:scale(1); }
+}
+@keyframes float {
+    0%,100% { transform:translateY(0); }
+    50%      { transform:translateY(-14px); }
+}
+@keyframes pulse-dot {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%     { opacity:0.5; transform:scale(1.4); }
 }
 
-.navbar-nav .nav-link::after {
-    content: "";
-    position: absolute;
-    
-    left: 50%;
-    bottom:5px;
-    width: 0%;
-    height: 2.4px;
-    background: #fff;
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-}
-
-.navbar-nav .nav-link:hover::after {
-    width: 60%;
-}
-
-.navbar-nav .nav-link:hover {
-    font-weight: 700;
-}
-    .botaocadastro{
-        background-color: transparent;
-        color: #ffffff;
-        border: 2px solid #ffffff;
-        padding: 6px 14px;
-        margin-right:0px;
-        border-radius: 6px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s;
-    }
-    .botaologin{
-        background-color: #0a0a0a;
-        color: #ffffff;
-        border: 2px solid #0a0a0a;
-        padding: 6px 14px;
-        border-radius: 6px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s;
-       
-    }
-    .botaocadastro:hover{
-        background-color: #ffffff;
-        color: #fa4101;
-        transform:scale(1.05);
-    }
-
-    .botaologin:hover{
-        transform:scale(1.05);
-    }
+.anim-up    { opacity:0; animation:fadeUp    0.8s ease forwards paused; }
+.anim-left  { opacity:0; animation:fadeLeft  0.8s ease forwards paused; }
+.anim-right { opacity:0; animation:fadeRight 0.8s ease forwards paused; }
+.anim-scale { opacity:0; animation:scaleIn   0.8s ease forwards paused; }
+.delay-1 { animation-delay:0.15s; }
+.delay-2 { animation-delay:0.30s; }
+.delay-3 { animation-delay:0.45s; }
+.delay-4 { animation-delay:0.60s; }
 
 .hero {
-    background-color: #fff;
-    padding: 0px 60px 0 60px;
+    min-height: auto;
+    background:
+        radial-gradient(ellipse 55% 70% at 75% 50%, rgba(250,65,1,0.08) 0%, transparent 70%);
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
+    gap: 60px;
+    padding: 80px 8% 80PX;
     position: relative;
-    z-index: 1;
-}
-.hero-image-wrapper {
-    position: relative;
-    width: 800px;
-    margin-bottom: -160px;
-    z-index: 1; 
 }
 
-.hero-image-wrapper img {
+
+
+.hero-image {
+    flex-shrink: 0;
+    width: clamp(300px, 38vw, 650px);
+    animation: float 3.5s ease-in-out infinite; 
+    filter: drop-shadow(0 20px 40px rgba(250,65,1,0.3));
+    align-self: flex-end;
+}
+
+.hero-image img {
     width: 100%;
     height: auto;
-    position: relative;
-    z-index: 1;
-    margin-left: -120px;
-}
-.curva-topo {
-    position: relative;
-    z-index: 3; 
-    line-height: 0;
+    display: block;
+    object-fit: contain;
+    margin-bottom: 0;
+    
 }
 
-.curva-topo svg {
-    display: block;
-    width: 100%;
-    height: 120px;
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    bottom: -120px; /* estende o grid pra baixo da curva */
+    background-image:
+        linear-gradient(rgba(250,65,1,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(250,65,1,0.03) 1px, transparent 1px);
+    background-size: 52px 52px;
+    pointer-events: none;
+    z-index: 0;
 }
 .hero-text {
-    padding-bottom: 80px; margin-left: 50px;
-    margin-top: -50px;
-
+    flex: 1;
+    max-width: 860px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
-    .hero-text h1 {
-        font-size: 5rem;
-        font-weight: 900;
-       
-        line-height: 0.95;
-        color: #111;
-        letter-spacing: -4px;
-    }
-    .hero-text h1 span {
-        background: linear-gradient(90deg, #fa4101, #f97316);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    .hero-text p {
-        color: #000000;
-        font-size: 1.1rem;
-        margin: 20px 0;
-        max-width: 420px;
-    }
-    .hero-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 24px;
-    }
-    .btn-hero {
-        padding: 12px 24px;
-        border: 2px solid #fa4101;
-        border-radius: 8px;
-        font-weight: 700;
-        font-size: 0.9rem;
-        color: #fa4101;
-        text-decoration: none;
-        text-transform: uppercase;
-        transition: all 0.2s;
-    }
-    .btn-hero:hover {
-        background-color: #fa4101;
-        color: #fff;
-    }
 
-    .como-funciona {
-        background-color: #fa4101;
-        padding: 80px 60px;
-        text-align: center;
-    }
-    .como-funciona h2 {
-        font-size: 2.2rem;
-        font-weight: 900;
-        color: #fff;
-        text-transform: uppercase;
-        margin-bottom: 50px;
-    }
+.hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(250,65,1,0.08);
+    border: 1px solid rgba(250,65,1,0.2);
+    color: #fa4101;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+}
+.hero-tag .dot {
+    width: 7px; height: 7px;
+    background: #fa4101;
+    border-radius: 50%;
+    animation: pulse-dot 1.6s ease infinite;
+}
 
-    .sobre {
-        background: #fff;
-        padding: 80px 60px;
-        display: flex;
-        gap: 80px;
-        align-items: center;
-    }
-    .sobre-text h2 {
-        font-size: 50px;
-        font-weight:800;
-        color: #fa4101;
-        text-transform: uppercase;
-        margin-top: -80px;
-    }
-    .sobre-text p {
-        color: #000000;
-        line-height: 1.8;
-        font-size: 20px;
+.hero-text h1 {
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    color: #111;
+    letter-spacing: -3px;
+}
+.hero-text h1 em {
+    font-style: normal;
+    color: #fa4101;
+}
+
+.hero-text > p {
+    margin-top: 22px;
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: #555;
+    max-width: 480px;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 36px;
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    width: 100%;
+}
+.stat strong {
+    display: block;
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: #fa4101;
+    line-height: 1;
+}
+.stat span {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 5px;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+}
+.btn-primary-hero {
+    padding: 14px 28px;
+    background: #fa4101;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border: 2px solid #fa4101;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+}
+.btn-primary-hero:hover {
+    background: #d93600;
+    border-color: #d93600;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(250,65,1,0.3);
+}
+.btn-outline-hero {
+    padding: 14px 28px;
+    background: transparent;
+    color: #fa4101;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border: 2px solid #fa4101;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+}
+.btn-outline-hero:hover {
+    background: #fa4101;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+
+/* ── WAVES ── */
+.wave-down {
+    line-height: 0;
+    position: relative;
+    z-index: 2;
+    margin-bottom:-1px;
     
-    }
-    .sobre-text p span {
-        color: #fa4101;
-        font-weight: 700;
-    }
-    .sobre-image {
-        min-width: 320px;
-        width: 320px;
-        height: 280px;
-        background: linear-gradient(135deg, #1e293b, #fa4101);
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 5rem;
-        flex-shrink: 0;
-    }
+}
+.wave-down svg { display:block; width:100%; }
+.wave-up { background:#fa4101; line-height:0; margin-bottom:50px; }
+.wave-up svg { display:block; width:100%; }
+.como-funciona {
+    background: #fa4101;
+    padding: 80px 8%;
+    text-align: center;
+}
+.como-funciona h2 {
+    color: #fff;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin-bottom: 48px;
+}
+.cf-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.cf-card {
+    background: #fff;
+    border-radius: 14px;
+    border:10px solid #fff;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: translateY(40px);
+}
+.cf-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.cf-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+}
+.cf-img-wrap { position: relative; }
+.cf-img-wrap img { width: 100%; height: 180px; object-fit: cover; display: block; }
+.cf-badge {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: #000000;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 900;
+    padding: 6px 12px;
+    border-radius: 16px;
+}
+.cf-label {
+    background: #000000;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    border-radius: 0 0 14px 14px;
+    text-align: center;
+    transition: background 0.3s;
+}
+.cf-card:hover .cf-label { background: #000000; }
+.cf-desc {
+    padding: 16px;
+    font-size: 0.85rem;
+    color: #444;
+    line-height: 1.7;
+    text-align: center;
+}
+.como-funciona > p {
+    color: rgba(255,255,255,0.9);
+    margin-top: 40px;
+    line-height: 1.9;
+    font-size: 1rem;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-  
-    .por-que {
-        background: #111;
-        padding: 80px 60px;
-    }
-    .por-que h2 {
-        font-size: 2.2rem;
-        font-weight: 900;
-        color: #fff;
-        text-transform: uppercase;
+/* ── SOBRE ── */
+.sobre {
+    padding: 100px 8%;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    background: #fff;
+}
+.sobre-text { flex:1; }
+.sobre-text h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    width:550px;
+    color: #fa4101;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    line-height: 1;
+}
+.sobre-text p {
+    color: #444;
+    font-size: 1.02rem;
+    line-height: 1.9;
+    margin-bottom: 18px;
+}
+.sobre-text b { color: #fa4101; }
+.sobre-badges { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+.sobre-badge {
+    background: #fff5f0;
+    border: 1px solid rgba(250,65,1,0.18);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #fa4101;
+}
+
+
+.sobre-img-wrap img { width: 100%; height: auto; display: block; object-fit: contain; transition:0.5s; margin-top:50px; }
+.sobre-img-wrap img:hover { transform: scale(1.05); }
+.vantagens {
+    background: #111;
+    padding: 100px 8%;
+    text-align: center;
+}
+.vantagens h2 {
+    color: #fff;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin-bottom: 56px;
+}
+.vantagens h2 span { color: #fa4101; }
+.vantagens-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 780px;
+    margin: 0 auto;
+}
+.vantagem-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: #1a1a1a;
+    border: 1.5px solid #fa4101;
+    border-radius: 12px;
+    padding: 22px 28px;
+    transition: background 0.3s, box-shadow 0.3s;
+    text-align: left;
+}
+.vantagem-card:hover {
+    background: #1f1f1f;
+    box-shadow: 0 0 0 2px #fa4101, 0 8px 32px rgba(250,65,1,0.15);
+}
+.vantagem-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(250,65,1,0.12);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 24px;
+    color: #fa4101;
+    transition: background 0.3s, transform 0.3s;
+}
+.vantagem-card:hover .vantagem-icon {
+    background: rgba(250,65,1,0.22);
+    transform: scale(1.1);
+}
+.vantagem-label {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+.vantagem-desc { color: #888; font-size: 0.84rem; line-height: 1.6; }
+
+.footer {
+    background: #0a0a0a;
+    padding: 70px 8%;
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    flex-wrap: wrap;
+    border-top: 3px solid #fa4101;
+}
+.footer h3 { font-size:1.5rem; font-weight:900; color:#fff; }
+.footer h3 span { color:#fa4101; }
+.footer > div > p { color:#555; margin-top:10px; font-size:0.88rem; }
+.footer-col h4 { color:#fff; font-weight:700; margin-bottom:14px; font-size:0.9rem; }
+.footer-col a {
+    display:block; color:#555; text-decoration:none;
+    margin-bottom:10px; font-size:0.85rem; transition:all 0.2s;
+}
+.footer-col a:hover { color:#fa4101; padding-left:5px; }
+.footer-bottom {
+    background:#0a0a0a; border-top:1px solid #1a1a1a;
+    text-align:center; padding:18px; color:#444; font-size:0.8rem;
+}
+@media(max-width:992px){
+    .hero {
+        flex-direction: column-reverse;
+        align-items: center;
         text-align: center;
-        margin-bottom: 50px;
+        padding: 40px 6% 0;
+        gap: 0;
     }
-    .por-que h2 span {
-        color: #fa4101;
+    .hero-text {
+        align-items: center;
+        max-width: 100%;
+        padding-bottom: 40px;
     }
-    .motivos {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        max-width: 800px;
+      .hero-image {
+        width: clamp(220px, 70vw, 360px);
+        animation: none;
         margin: 0 auto;
-    }
-    .motivo {
-        border: 2px solid #fa4101;
-        border-radius: 12px;
-        padding: 24px 28px;
         display: flex;
-        align-items: center;
-        gap: 24px;
+        justify-content: center;
+        margin-bottom:50px;
     }
-    .motivo-icon {
-        font-size: 2rem;
-        min-width: 50px;
-        text-align: center;
+    .hero-text > p { max-width: 100%; }
+    .hero-stats { justify-content: center; }
+    .hero-buttons { justify-content: center; }
+    .hero-image {
+        width: clamp(220px, 70vw, 360px);
+        animation: none;
     }
-    .motivo-title {
-        font-weight: 900;
-        font-size: 1rem;
-        text-transform: uppercase;
-        color: #fff;
-        min-width: 200px;
-    }
-    .motivo-desc {
-        color: #aaa;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
+    .sobre { flex-direction:column; text-align:center; gap:40px; padding:70px 6%; }
+    .sobre-img-wrap img { max-width:560px; margin:0 auto; margin-left:80px;  }
+    .sobre-badges { justify-content:center; }
+}
 
-    /* FOOTER */
-    .footer {
-        background: #0a0a0a;
-        padding: 60px;
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 40px;
-        border-top: 3px solid #fa4101;
+@media(max-width:768px){
+    .hero { padding: 30px 5% 0; }
+        .cf-grid { grid-template-columns: 1fr; max-width: 380px; }
+
+    .btn-primary-hero, .btn-outline-hero {
+        width: auto;
+        padding: 12px 20px;
+        font-size: 0.78rem;
     }
-    .footer-brand h3 {
-        font-weight: 900;
-        font-size: 1.5rem;
-        color: #fff;
-    }
-    .footer-brand h3 span { color: #fa4101; }
-    .footer-brand p {
-        color: #666;
-        font-size: 0.85rem;
-        margin-top: 8px;
-    }
-    .footer-col h5 {
-        color: #fff;
-        font-weight: 700;
-        font-size: 0.95rem;
-        margin-bottom: 16px;
-    }
-    .footer-col a {
-        display: block;
-        color: #666;
-        font-size: 0.85rem;
-        text-decoration: none;
-        margin-bottom: 8px;
-        transition: color 0.2s;
-    }
-    .footer-col a:hover { color: #fa4101; }
-    .footer-bottom {
-        background: #0a0a0a;
-        text-align: center;
-        padding: 16px;
-        color: #444;
-        font-size: 0.8rem;
-        border-top: 1px solid #1a1a1a;
-    }
-    .imgsobre{
-        transition: all 0.2s;
-    }
-    .imgsobre:hover{
-        transform: scale(1.03);
-    }
+    .hero-buttons { gap: 8px; }
+    .footer { flex-direction:column; padding:50px 5%; }
+    .wave-down svg, .wave-up svg { height:70px; }
+    .hero-stats { gap:20px; flex-wrap:wrap; }
+    .hero-image { width: clamp(200px, 65vw, 300px); }
+}
+
+@media(max-width:480px){
+    .hero-text h1 { letter-spacing: -1.5px; }
+    .btn-primary-hero, .btn-outline-hero { font-size: 0.75rem; padding: 11px 16px; }
+}
 </style>
 
-
 <section class="hero">
-
     <div class="hero-text">
-        <h1>Aqui a gente põem<br>a <span>Mão na Massa</span><br>por você!</h1>
-        <p>Conectamos clientes a prestadores de serviço confiáveis, de forma rápida, <strong>prática</strong> e segura.</p>
-        <div class="hero-buttons">
-            <a href="{{ route('servicos.index') }}" class="btn-hero">Serviços</a>
-            <a href="{{ route('produtos.index') }}" class="btn-hero">Produtos</a>
-            <a href="{{ route('solicitacoes.index') }}" class="btn-hero">Agendamento</a>
-            <a href="#sobre" class="btn-hero">Parcerias</a>
+
+        <h1 class="anim-up delay-1">
+            Aqui a gente põe<br>
+            a <em>Mão na Massa</em><br>
+            por você
+        </h1>
+        <p class="anim-up delay-2">
+            Conectamos clientes a prestadores de serviço confiáveis,
+            de forma rápida, prática e segura.
+        </p>
+        <div class="hero-stats anim-up delay-3">
+            <div class="stat"><strong>500+</strong><span>Prestadores</span></div>
+            <div class="stat"><strong>2k+</strong><span>Serviços feitos</span></div>
+            <div class="stat"><strong>4.9</strong><span>Avaliação média</span></div>
+        </div>
+        <div class="hero-buttons anim-up delay-4">
+            <a href="{{ route('servicos.index') }}" class="btn-primary-hero">Ver Serviços</a>
+            <a href="{{ route('produtos.index') }}" class="btn-outline-hero">Produtos</a>
+            <a href="{{ route('solicitacoes.index') }}" class="btn-outline-hero">Agendamento</a>
         </div>
     </div>
-      <div class="hero-image-wrapper">
-        <div class="circulo"></div>
-        <img  src="/BANNER.png" alt="Prestador">
 
+    <div class="hero-image ">
+        <img src="/BANNER.png" alt="Prestador">
+    </div>
 </section>
-<div class="curva-topo">
-    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-        <path d="M0,120 C360,0 1080,0 1440,120 L1440,120 L0,120 Z" fill="#fa4101"></path>
+
+{{-- CURVA branco → laranja --}}
+<div class="wave-down">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" height="120">
+        <path fill="#fa4101" d="M0,0 C480,120 960,120 1440,0 L1440,120 L0,120 Z"/>
     </svg>
 </div>
-<section class="como-funciona">
-    
-    <h2>Como Funciona?</h2>
-    <div class="steps">
-        <IMG src="/COMOFUNCIONA.png" alt="Como Funciona">
+
+<section class="como-funciona" id="como-funciona">
+    <h2 class="anim-up">Como Funciona?</h2>
+    <div class="cf-grid">
+        <div class="cf-card anim-up delay-1">
+            <div class="cf-img-wrap">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80">
+
+                <span class="cf-badge">01</span>
+            </div>
+            <div class="cf-label">Busque por um serviço</div>
+            <div class="cf-desc">Encontre serviços e auxílios de vários nichos e complexidades com diferentes profissionais.</div>
+        </div>
+        <div class="cf-card anim-up delay-2">
+            <div class="cf-img-wrap">
+                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80">
+
+                <span class="cf-badge">02</span>
+            </div>
+            <div class="cf-label">Escolha o profissional</div>
+            <div class="cf-desc">Encontre profissionais por categoria, preço e localização. Veja avaliações e horários.</div>
+        </div>
+        <div class="cf-card anim-up delay-3">
+            <div class="cf-img-wrap">
+<img src="https://hsvp.org.br/wp-content/uploads/2021/08/Centros-Avancados_Agendar-Consulta_CONSULTAS_17.jpg">
+                <span class="cf-badge">03</span>
+            </div>
+            <div class="cf-label">Agende online</div>
+            <div class="cf-desc">Selecione data, horário e forma de pagamento. Tudo seguro e prático.</div>
+        </div>
     </div>
-    <p style="color: #fff; margin-top:25px;font-size:20px">
-        Após o agendamento, o profissional irá <strong>executar o serviço</strong> ao qual você pode<strong> avaliar</strong> em diferentes critérios <br>além disso o pagamento fica retido em nossa plataforma até a conclusão do processo e sua confirmação!
+    <p class="anim-up delay-4">
+        Após o agendamento, o profissional executa o serviço.
+        Você avalia diversos critérios e o pagamento fica protegido
+        até a conclusão do trabalho e sua aprovação.
     </p>
 </section>
-<div class="curva-topo">
-    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-        <path d="M0,120 C360,0 1080,0 1440,120 L1440,120 L0,120 Z" fill="#fa4101"></path>
-    </svg>
-</div>
+
+
+{{-- SOBRE --}}
 <section class="sobre" id="sobre">
-    <div class="sobre-text">
+    <div class="sobre-text anim-left">
         <h2>Sobre Nós</h2>
-        <p>A empresa <span>Mão na Massa</span> surgiu com o propósito de modernizar o acesso a serviços domésticos e de manutenção, unindo tecnologia e praticidade. Fundada em 2025 em Chapecó/SC, a startup nasceu da necessidade de <span>encontrar profissionais confiáveis</span>, para atividades do dia a dia.</p>
-        <p>A partir disso, a empresa desenvolveu uma plataforma online capaz de conectar clientes a prestadores de serviço verificados, garantindo uma experiência mais segura, organizada e transparente para ambas as partes.</p>
+        <p>A <b>Mão na Massa</b> nasceu para modernizar o acesso a serviços domésticos e de manutenção, unindo tecnologia e praticidade. Fundada em 2025 em Chapecó/SC.</p>
+        <p>Nossa plataforma conecta clientes a profissionais verificados, garantindo mais segurança, praticidade e transparência para ambas as partes.</p>
+        <div class="sobre-badges">
+            <span class="sobre-badge">Prestadores verificados</span>
+            <span class="sobre-badge">Pagamento protegido</span>
+            <span class="sobre-badge">Avaliações reais</span>
+        </div>
     </div>
-    <img class="imgsobre" src="/SOBRE.png" alt="">
+    <div class="sobre-img-wrap anim-right">
+        <img src="/SOBRE.png" alt="Sobre a Mão na Massa">
+    </div>
 </section>
 
-
-<section class="por-que">
-    <h2>Por que nos <span>Escolher</span>?</h2>
-    <div class="motivos">
-        <img  src="/PORQUEESOLHER.png" alt="">
+<section class="vantagens" id="vantagens">
+    <h2 class="anim-up">Por que nos <span>Escolher?</span></h2>
+    <div class="vantagens-list">
+        <div class="vantagem-card anim-left delay-1">
+            <div class="vantagem-icon"><i class="fa fa-shield-alt"></i></div>
+            <div>
+                <div class="vantagem-label">Segurança & Confiabilidade</div>
+                <div class="vantagem-desc">Todos os prestadores são verificados e avaliados após cada serviço.</div>
+            </div>
+        </div>
+        <div class="vantagem-card anim-left delay-2">
+            <div class="vantagem-icon"><i class="fa fa-cogs"></i></div>
+            <div>
+                <div class="vantagem-label">Tudo em um só sistema</div>
+                <div class="vantagem-desc">Solicitação, orçamento, produtos, agendamento e pagamento.</div>
+            </div>
+        </div>
+        <div class="vantagem-card anim-left delay-3">
+            <div class="vantagem-icon"><i class="fa fa-coin"></i></div>
+            <div>
+                <div class="vantagem-label">Valor custo benefício</div>
+                <div class="vantagem-desc">Contamos com ótimos prestadores, orçamentos claros e seguros, incluindo opção de contratos.</div>
+            </div>
+        </div>
+        <div class="vantagem-card anim-left delay-4">
+            <div class="vantagem-icon"><i class="fa fa-headset"></i></div>
+            <div>
+                <div class="vantagem-label">Suporte & Atendimento</div>
+                <div class="vantagem-desc">Uma equipe sempre pronta para resolver, desmarcar e auxiliar você.</div>
+            </div>
+        </div>
     </div>
 </section>
 
-
+{{-- FOOTER --}}
 <footer class="footer">
-    <div class="footer-brand">
+    <div>
         <h3>Mão na <span>Massa</span></h3>
-        <p>Mão na Massa 2025 · Todos os direitos reservados</p>
+        <p>Conectando clientes e profissionais.</p>
     </div>
     <div class="footer-col">
-        <h5>Acessar plataforma</h5>
+        <h4>Plataforma</h4>
         <a href="{{ route('solicitacoes.index') }}">Solicitar serviço</a>
-        <a href="{{ route('servicos.index') }}">Buscar prestadores</a>
-        <a href="{{ route('produtos.index') }}">Produtos e materiais</a>
+        <a href="{{ route('servicos.index') }}">Prestadores</a>
+        <a href="{{ route('produtos.index') }}">Produtos</a>
         <a href="{{ route('orcamentos.index') }}">Orçamentos</a>
     </div>
     <div class="footer-col">
-        <h5>Suporte</h5>
-        <a href="#">Central de Ajuda</a>
-        <a href="#">Perguntas frequentes</a>
-        <a href="#">Fale conosco</a>
-        <a href="#">Políticas e termos</a>
+        <h4>Suporte</h4>
+        <a href="#">Ajuda</a>
+        <a href="#">FAQ</a>
+        <a href="#">Contato</a>
         <a href="#">Segurança</a>
     </div>
 </footer>
 <div class="footer-bottom">
-    Mão na Massa 2025 · Todos os direitos reservados
+    © 2025 Mão na Massa — Todos os direitos reservados.
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.style.animationPlayState = 'running';
+            observer.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.anim-up,.anim-left,.anim-right,.anim-scale')
+    .forEach(el => observer.observe(el));
+</script>
 @endsection

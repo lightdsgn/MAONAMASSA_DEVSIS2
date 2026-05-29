@@ -11,7 +11,7 @@
         * { font-family: 'Sora', sans-serif; }
         body { background-color: #f8f9fa; }
 
-        /* Sidebar */
+       
         .sidebar {
             width: 240px;
             min-height: calc(100vh - 80px);
@@ -89,6 +89,7 @@
             color: #fff;
             font-size: 0.85rem;
         }
+        .main-content { padding: 0; }
     </style>
 </head>
 <body>
@@ -122,8 +123,8 @@
             @else
                 @yield('navbar-botoes')
                 @if(!Route::is('login') && !Route::is('registro'))
-                <a href="{{ route('registro') }}" class="botaocadastro"><i class="bi bi-person-plus me-1"></i>Cadastro</a>
-                <a href="{{ route('login') }}" class="botaologin"><i class="bi bi-box-arrow-in-right me-1" style="color:#fa4101"></i>Login</a>
+                <a href="{{ route('registro') }}" class="botaocadastro"><i class="bi bi-person-plus me-1"></i>CADASTRO</a>
+                <a href="{{ route('login') }}" class="botaologin"><i class="bi bi-box-arrow-in-right me-1" style="color:#fa4101"></i>LOGIN</a>
                 @endif
             @endauth
         </div>
@@ -134,9 +135,6 @@
     @auth
     <div class="sidebar">
         <div class="nav-title">Geral</div>
-        <a href="{{ route('home') }}" class="{{ request()->is('/') ? 'active' : '' }}">
-            <i class="bi bi-house me-2"></i>Início
-        </a>
         <a href="{{ route('perfil') }}" class="{{ request()->is('perfil*') ? 'active' : '' }}">
             <i class="bi bi-person-circle me-2"></i>Meu Perfil
         </a>
