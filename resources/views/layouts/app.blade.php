@@ -6,7 +6,7 @@
     <title>Mão na Massa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Sora', sans-serif; }
@@ -82,6 +82,20 @@
         }
         .botaocadastro:hover { background: #fff; color: #fa4101; transform: scale(1.05); }
         .botaologin:hover { transform: scale(1.05); }
+        
+        /* Botão Voltar */
+        .btn-light {
+            background: #fff !important;
+            color: #fa4101 !important;
+            border: 2px solid #fa4101 !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-light:hover {
+            background: #fa4101 !important;
+            color: #fff !important;
+            transform: translateX(-3px);
+        }
 
         .user-badge {
             background: rgba(255,255,255,0.15);
@@ -110,6 +124,11 @@
         </ul>
 
         <div class="d-flex align-items-center gap-2">
+            @if(Route::is('login') || Route::is('registro'))
+            <a href="{{ route('home') }}" class="btn btn-light" title="Voltar à página inicial">
+                <i class="fas fa-arrow-left me-1"></i>Voltar
+            </a>
+            @endif
             @auth
                 <span class="user-badge d-none d-lg-block">
                     <i class="bi bi-person-fill me-1"></i>{{ Auth::user()->nome }}

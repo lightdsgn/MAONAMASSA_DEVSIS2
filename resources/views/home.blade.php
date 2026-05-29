@@ -1,9 +1,10 @@
+
     @extends('layouts.app')
 
     @section('content')
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
+        
     @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&display=swap');
 
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; font-family:'Sora',sans-serif; }
@@ -11,7 +12,7 @@
     body { background:#fff; overflow-x:hidden; }
 
     @keyframes fadeUp {
-        from { opacity:0; transform:translateY(40px); }
+        from { opacity:0; transform:translateY(40px); } 
         to   { opacity:1; transform:translateY(0); }
     }
     @keyframes fadeLeft {
@@ -33,6 +34,10 @@
     @keyframes pulse-dot {
         0%,100% { opacity:1; transform:scale(1); }
         50%     { opacity:0.5; transform:scale(1.4); }
+    }
+    @keyframes heroImageFade {
+        from { opacity:0; transform:translateY(40px) scale(0.95); }
+        to   { opacity:1; transform:translateY(0) scale(1); }
     }
 
     .anim-up    { opacity:0; animation:fadeUp    0.8s ease forwards paused; }
@@ -61,7 +66,7 @@
     .hero-image {
         flex-shrink: 0;
         width: clamp(300px, 38vw, 650px);
-        animation: float 3.5s ease-in-out infinite; 
+        animation: heroImageFade 0.8s ease forwards, float 3.5s ease-in-out 0.8s infinite; 
         filter: drop-shadow(0 20px 40px rgba(250,65,1,0.3));
         align-self: flex-end;
     }
@@ -340,6 +345,7 @@
 
     .sobre-img-wrap img { width: 100%; height: auto; display: block; object-fit: contain; transition:0.5s; margin-top:50px; }
     .sobre-img-wrap img:hover { transform: scale(1.05); }
+    .vantagens .sobre-img-wrap img:hover { transform: none; }
     .vantagens {
         background: #111;
         padding: 100px 8%;
@@ -354,54 +360,6 @@
         margin-bottom: 56px;
     }
     .vantagens h2 span { color: #fa4101; }
-    .vantagens-list {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        max-width: 780px;
-        margin: 0 auto;
-    }
-    .vantagem-card {
-        display: flex;
-        align-items: center;
-        gap: 24px;
-        background: #1a1a1a;
-        border: 1.5px solid #fa4101;
-        border-radius: 12px;
-        padding: 22px 28px;
-        transition: background 0.3s, box-shadow 0.3s;
-        text-align: left;
-    }
-    .vantagem-card:hover {
-        background: #1f1f1f;
-        box-shadow: 0 0 0 2px #fa4101, 0 8px 32px rgba(250,65,1,0.15);
-    }
-    .vantagem-icon {
-        width: 52px;
-        height: 52px;
-        background: rgba(250,65,1,0.12);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        font-size: 24px;
-        color: #fa4101;
-        transition: background 0.3s, transform 0.3s;
-    }
-    .vantagem-card:hover .vantagem-icon {
-        background: rgba(250,65,1,0.22);
-        transform: scale(1.1);
-    }
-    .vantagem-label {
-        color: #fff;
-        font-size: 0.95rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 6px;
-    }
-    .vantagem-desc { color: #888; font-size: 0.84rem; line-height: 1.6; }
 
     .footer {
         background: #0a0a0a;
@@ -504,7 +462,7 @@
             </div>
         </div>
 
-        <div class="hero-image ">
+        <div class="hero-image">
             <img src="/BANNER.png" alt="Prestador">
         </div>
     </section>
@@ -576,45 +534,12 @@
 
     <section class="vantagens" id="vantagens">
         <h2 class="anim-up">Por que nos <span>Escolher?</span></h2>
-        <div class="vantagens-list">
-            <div class="vantagem-card anim-left delay-1">
-                <div class="vantagem-icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fa4101" viewBox="0 0 512 512">
-        <path d="M256 0L48 96v128c0 132 91 256 208 288 117-32 208-156 208-288V96L256 0zm0 240h112c-8 72-48 136-112 168V240zm0 0V88l-112 48v104h112z"/>
-    </svg></div>
-                <div>
-                    <div class="vantagem-label">Segurança & Confiabilidade</div>
-                    <div class="vantagem-desc">Todos os prestadores são verificados e avaliados após cada serviço.</div>
-                </div>
-            </div>
-            <div class="vantagem-card anim-left delay-2">
-                <div class="vantagem-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fa4101" viewBox="0 0 512 512">
-        <path d="M495 224h-31c-5-22-13-42-24-61l22-22c9-9 9-25 0-34l-57-57c-9-9-25-9-34 0l-22 22c-19-11-39-19-61-24V17c0-9-8-17-17-17h-80c-9 0-17 8-17 17v31c-22 5-42 13-61 24L91 50c-9-9-25-9-34 0L0 107c-9 9-9 25 0 34l22 22C11 182 3 202 0 224h-17v80h31c5 22 13 42 24 61l-22 22c-9 9-9 25 0 34l57 57c9 9 25 9 34 0l22-22c19 11 39 19 61 24v31c0 9 8 17 17 17h80c9 0 17-8 17-17v-31c22-5 42-13 61-24l22 22c9 9 25 9 34 0l57-57c9-9 9-25 0-34l-22-22c11-19 19-39 24-61h31c9 0 17-8 17-17v-80c0-9-8-17-17-17zm-239 96c-53 0-96-43-96-96s43-96 96-96 96 43 96 96-43 96-96 96z"/>
-    </svg></div>
-                <div>
-                    <div class="vantagem-label">Tudo em um só sistema</div>
-                    <div class="vantagem-desc">Solicitação, orçamento, produtos, agendamento e pagamento.</div>
-                </div>
-            </div>
-            <div class="vantagem-card anim-left delay-3">
-                <div class="vantagem-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fa4101" viewBox="0 0 512 512">
-        <path d="M512 80c0 18-15 45-42 71C432 192 384 224 336 240c-9-19-21-37-35-53 46-16 90-45 124-80 18-18 31-36 38-52 3-7 4-13 4-17 0-2 0-4-1-5-1-2-3-3-5-3-4 0-10 1-17 4-16 7-34 20-52 38-35 34-64 78-80 124-16-14-34-26-53-35 16-48 48-96 91-138C356 79 392 64 420 64c15 0 29 5 39 16 10 10 16 24 16 39 0 0 0 1-1 2zm-355 208c-11 25-17 52-17 80 0 115 93 208 208 208 28 0 55-6 80-17-22-14-42-31-58-51-7 2-14 3-22 3-88 0-160-72-160-160 0-8 1-15 3-22-20-16-37-36-51-58zM288 512C129 512 0 383 0 224 0 128 44 42 114 -14l28 28C89 63 48 140 48 224c0 132 108 240 240 240 84 0 161-41 208-105l28 28C470 468 384 512 288 512z"/>
-    </svg></div>
-                <div>
-                    <div class="vantagem-label">Valor custo benefício</div>
-                    <div class="vantagem-desc">Contamos com ótimos prestadores, orçamentos claros e seguros, incluindo opção de contratos.</div>
-                </div>
-            </div>
-            <div class="vantagem-card anim-left delay-4">
-                <div class="vantagem-icon"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M320 64C324.6 64 329.2 65 333.4 66.9L521.8 146.8C543.8 156.1 560.2 177.8 560.1 204C559.6 303.2 518.8 484.7 346.5 567.2C329.8 575.2 310.4 575.2 293.7 567.2C121.3 484.7 80.6 303.2 80.1 204C80 177.8 96.4 156.1 118.4 146.8L306.7 66.9C310.9 65 315.4 64 320 64zM320 130.8L320 508.9C458 442.1 495.1 294.1 496 205.5L320 130.9L320 130.9z"/></svg></div>
-                <div>
-                    <div class="vantagem-label">Suporte & Atendimento</div>
-                    <div class="vantagem-desc">Uma equipe sempre pronta para resolver, desmarcar e auxiliar você.</div>
-                </div>
-            </div>
+        <div class="sobre-img-wrap anim-left">
+            <img  style="width: 90%;" src="/PORQUEESOLHER.png" alt="">
         </div>
     </section>
 
-    {{-- FOOTER --}}
+
     <footer class="footer">
         <div>
             <h3>Mão na <span>Massa</span></h3>
