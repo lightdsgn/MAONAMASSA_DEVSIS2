@@ -15,14 +15,37 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Administrador padrão — altere a senha após o primeiro login!
+        // Administrador padrão
         Usuario::firstOrCreate(
             ['email' => 'admin@maonamassa.com.br'],
             [
                 'nome'     => 'Administrador',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('admin!maonamassa'),
                 'tipo'     => 'adm',
                 'telefone' => null,
+            ]
+        );
+
+        // Usuário cliente padrão
+        Usuario::firstOrCreate(
+            ['email' => 'cliente@maonamassa.com.br'],
+            [
+                'nome'     => 'Cliente Padrão',
+                'password' => Hash::make('cliente!maonamassa'),
+                'tipo'     => 'cliente',
+                'telefone' => null,
+            ]
+        );
+
+        // Usuário prestador padrão
+        Usuario::firstOrCreate(
+            ['email' => 'prestador@maonamassa.com.br'],
+            [
+                'nome'         => 'Prestador Padrão',
+                'password'     => Hash::make('prestador!maonamassa'),
+                'tipo'         => 'prestador',
+                'telefone'     => null,
+                'especialidade'=> 'Serviços Gerais',
             ]
         );
     }
