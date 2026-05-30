@@ -2,7 +2,7 @@
     @extends('layouts.app')
 
     @section('content')
-
+    <script src="https://kit.fontawesome.com/7cfadf3f16.js" crossorigin="anonymous"></script>
     <style>
         
     @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&display=swap');
@@ -57,7 +57,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 60px;
-        padding: 80px 8% 80PX;
+        padding: 180px 8% 80PX;
         position: relative;
     }
 
@@ -72,7 +72,7 @@
     }
 
     .hero-image img {
-        width: 100%;
+        width: 110%;
         height: auto;
         display: block;
         object-fit: contain;
@@ -214,7 +214,6 @@
     }
 
 
-    /* ── WAVES ── */
     .wave-down {
         line-height: 0;
         position: relative;
@@ -305,7 +304,7 @@
         margin-right: auto;
     }
 
-    /* ── SOBRE ── */
+
     .sobre {
         padding: 100px 8%;
         display: flex;
@@ -317,7 +316,7 @@
     .sobre-text h2 {
         font-size: clamp(2rem, 4vw, 3.2rem);
         font-weight: 900;
-        width:550px;
+        width:400px;
         color: #fa4101;
         text-transform: uppercase;
         letter-spacing: -2px;
@@ -403,6 +402,7 @@
             display: flex;
             justify-content: center;
             margin-bottom:50px;
+            margin-top:50px;
         }
         .hero-text > p { max-width: 100%; }
         .hero-stats { justify-content: center; }
@@ -412,7 +412,7 @@
             animation: none;
         }
         .sobre { flex-direction:column; text-align:center; gap:40px; padding:70px 6%; }
-        .sobre-img-wrap img { max-width:560px; margin:0 auto; margin-left:80px;  }
+        .sobre-img-wrap img { max-width:500px; margin:0 auto; }
         .sobre-badges { justify-content:center; }
     }
 
@@ -438,7 +438,7 @@
     }
     </style>
 
-    <section class="hero">
+    <section class="hero" >
         <div class="hero-text">
 
             <h1 class="anim-up delay-1">
@@ -534,8 +534,8 @@
 
     <section class="vantagens" id="vantagens">
         <h2 class="anim-up">Por que nos <span>Escolher?</span></h2>
-        <div class="sobre-img-wrap anim-left">
-            <img  style="width: 90%;" src="/PORQUEESOLHER.png" alt="">
+        <div class="sobre-img-wrap anim-left" style="display: flex; justify-content: center; margin: 0 auto;">
+            <img style="width: 80%;" src="/PORQUEESOLHER.png" alt="">
         </div>
     </section>
 

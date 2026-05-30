@@ -6,7 +6,7 @@
     <title>Mão na Massa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="https://kit.fontawesome.com/7cfadf3f16.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Sora', sans-serif; }
@@ -44,8 +44,7 @@
         }
         .main-content { padding: 24px; }
 
-        /* Navbar */
-        .navbar-logo { transition: 0.3s; }
+        .navbar-logo { transition: 0.3s;padding-left:130px; }
         .navbar-logo:hover { transform: scale(1.05); }
         .navbar-nav .nav-link {
             position: relative;
@@ -53,6 +52,7 @@
             color: #fff;
             font-weight: 500;
             padding: 8px 0;
+            
             transition: 0.2s;
         }
         .navbar-nav .nav-link::after {
@@ -79,22 +79,21 @@
             border: 2px solid #0a0a0a; padding: 5px 14px;
             border-radius: 6px; font-weight: 600;
             text-decoration: none; transition: all 0.2s;
+            margin-right:200px;
         }
         .botaocadastro:hover { background: #fff; color: #fa4101; transform: scale(1.05); }
         .botaologin:hover { transform: scale(1.05); }
         
-        /* Botão Voltar */
         .btn-light {
-            background: #fff !important;
-            color: #fa4101 !important;
-            border: 2px solid #fa4101 !important;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            background: transparent; color: #fff;
+            border: 2px solid #fff; padding: 5px 14px;
+            border-radius: 6px; font-weight: 600;
+            text-decoration: none; transition: all 0.2s;
+            margin-right:200px;
+         
         }
         .btn-light:hover {
-            background: #fa4101 !important;
-            color: #fff !important;
-            transform: translateX(-3px);
+            background: #fff; color: #fa4101; transform: scale(1.05);  border-color: #fff;
         }
 
         .user-badge {
@@ -104,47 +103,44 @@
             color: #fff;
             font-size: 0.85rem;
         }
+        nav{
+            border-bottom: 2px solid #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
         .main-content { padding: 0; }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#fa4101;height:80px;">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#fa4101;height:80px; position:fixed; z-index:1030; width:100%;">
     <div class="container-fluid px-4">
         <a class="navbar-logo" href="{{ route('home') }}">
             <img src="/logomaonamassa.png" height="48">
         </a>
 
-        <ul class="navbar-nav mx-auto d-none d-lg-flex">
-            @yield('navbar-links')
-            @auth
-            <li class="nav-item"><a class="nav-link" href="{{ route('servicos.index') }}">Serviços</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ route('produtos.index') }}">Produtos</a></li>
-            @endauth
-        </ul>
 
         <div class="d-flex align-items-center gap-2">
             @if(Route::is('login') || Route::is('registro'))
             <a href="{{ route('home') }}" class="btn btn-light" title="Voltar à página inicial">
-                <i class="fas fa-arrow-left me-1"></i>Voltar
+                <i style="margin-right:10px;" class="fa-solid fa-circle-arrow-left"></i>VOLTAR
             </a>
             @endif
             @auth
                 <span class="user-badge d-none d-lg-block">
-                    <i class="bi bi-person-fill me-1"></i>{{ Auth::user()->nome }}
+                    <i class="fa-solid fa-user me-1"></i>{{ Auth::user()->nome }}
                     <span class="badge bg-dark ms-1" style="font-size:0.65rem;">{{ strtoupper(Auth::user()->tipo) }}</span>
                 </span>
                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-dark">
-                        <i class="bi bi-box-arrow-right me-1"></i>Sair
+                        <i style="margin-right:10px;" class="fa-solid fa-door-open"></i>SAIR
                     </button>
                 </form>
             @else
                 @yield('navbar-botoes')
                 @if(!Route::is('login') && !Route::is('registro'))
-                <a href="{{ route('registro') }}" class="botaocadastro"><i class="bi bi-person-plus me-1"></i>CADASTRO</a>
-                <a href="{{ route('login') }}" class="botaologin"><i class="bi bi-box-arrow-in-right me-1" style="color:#fa4101"></i>LOGIN</a>
+                <a href="{{ route('registro') }}" class="botaocadastro"><i class="fa-solid fa-square-arrow-up-right" style="margin-right:10px;"></i>CADASTRO</a>
+                <a href="{{ route('login') }}" class="botaologin"><i class="fa-solid fa-circle-user" style="margin-right:10px;color:#fa4101"></i>LOGIN</a>
                 @endif
             @endauth
         </div>
@@ -210,6 +206,7 @@
 
         @if(Auth::user()->isAdm())
             <div class="nav-title mt-2">Administração</div>
+            <a href="{{ route('dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
             <a href="{{ route('usuarios.index') }}" class="{{ request()->is('usuarios*') ? 'active' : '' }}">
                 <i class="bi bi-people me-2"></i>Usuários
             </a>

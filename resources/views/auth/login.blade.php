@@ -38,7 +38,7 @@
     .login-header h2 {
         font-size: 1.6rem;
         font-weight: 900;
-        color: #fa4101;
+        color: #ffffff;
         letter-spacing: -0.5px;
         margin-bottom: 6px;
     }
@@ -200,13 +200,27 @@
     .login-footer a:hover {
         text-decoration: underline;
     }
+        .titulo{
+        font-size: 25px;
+        color: #ffffff;
+        font-family: Sora;
+        font-weight: 900;
+        margin-bottom: -5px;
+        margin-top: 40px;
+        background: linear-gradient(90deg, #fa4101, #f97316);
+        padding: 10px 20px;
+        max-width: 100%;
+        border-radius: 15px;
+        margin: auto;
+
+    }
 </style>
 
 <div class="login-wrap">
     <div class="login-card">
 
         <div class="login-header">
-            <h2>Bem-vindo de volta</h2>
+            <h2 class="titulo">FAÇA SEU LOGIN</h2>
             <p>Entre na sua conta para continuar</p>
         </div>
 

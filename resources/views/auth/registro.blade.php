@@ -47,7 +47,7 @@
 </style>
 
 <div class="d-flex justify-content-center align-items-center py-5" >
-    <div class="card p-4" style="width: 100%; max-width: 740px; border-radius: 15px;">
+    <div class="card p-4" style="width: 100%; max-width: 740px; border-radius: 15px; margin-top:100px;">
         <div class="text-center mb-4">
 
             <p class=titulo>CRIE SUA CONTA</p>
