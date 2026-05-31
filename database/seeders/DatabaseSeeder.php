@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         );
 
         // Usuário prestador padrão
-        Usuario::firstOrCreate(
+        $prestador = Usuario::firstOrCreate(
             ['email' => 'prestador@maonamassa.com.br'],
             [
                 'nome'         => 'Prestador Padrão',
@@ -46,6 +46,37 @@ class DatabaseSeeder extends Seeder
                 'tipo'         => 'prestador',
                 'telefone'     => null,
                 'especialidade'=> 'Serviços Gerais',
+            ]
+        );
+
+        // Serviços padrão para testes
+        \App\Models\Servico::firstOrCreate(
+            ['usuario_id' => $prestador->id, 'titulo' => 'Troca de lâmpada'],
+            [
+                'descricao'      => 'Instalação e troca de lâmpadas residenciais e comerciais.',
+                'categoria'      => 'Elétrica',
+                'preco_estimado' => 50.00,
+                'status'         => 'ativo',
+            ]
+        );
+
+        \App\Models\Servico::firstOrCreate(
+            ['usuario_id' => $prestador->id, 'titulo' => 'Reparo de torneira'],
+            [
+                'descricao'      => 'Reparo, vedação ou substituição de torneiras com vazamento.',
+                'categoria'      => 'Hidráulica',
+                'preco_estimado' => 120.00,
+                'status'         => 'ativo',
+            ]
+        );
+
+        \App\Models\Servico::firstOrCreate(
+            ['usuario_id' => $prestador->id, 'titulo' => 'Montagem de móvel'],
+            [
+                'descricao'      => 'Montagem de móveis de madeira e MDF com suporte completo.',
+                'categoria'      => 'Montagem',
+                'preco_estimado' => 180.00,
+                'status'         => 'ativo',
             ]
         );
     }

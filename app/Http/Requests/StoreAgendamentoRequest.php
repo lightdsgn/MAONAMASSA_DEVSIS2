@@ -14,10 +14,11 @@ class StoreAgendamentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'servico_id'  => 'required|exists:servicos,id',
-            'data'        => 'required|date|after_or_equal:today',
-            'horario'     => 'required',
-            'observacoes' => 'nullable|string|max:500',
+            'servico_id'   => 'required|exists:servicos,id',
+            'orcamento_id' => 'nullable|exists:orcamentos,id',
+            'data'         => 'required|date|after_or_equal:today',
+            'horario'      => 'required',
+            'observacoes'  => 'nullable|string|max:500',
         ];
     }
 

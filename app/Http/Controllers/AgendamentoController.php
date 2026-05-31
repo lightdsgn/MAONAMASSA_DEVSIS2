@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Agendamento;
 use App\Models\Orcamento;
 use App\Models\Servico;
+use App\Models\Solicitacao;
 
 class AgendamentoController extends Controller
 {
@@ -41,9 +42,23 @@ class AgendamentoController extends Controller
 
         $servico_id = $request->servico_id;
         $orcamento_id = $request->orcamento_id;
-        // Mostrar todos os serviços ativos no select (lista de exploração).
-        // A validação que exige orçamento aceito permanece no `store`.
-        $servicos = Servico::where('status', 'ativo')->get();
+        $servicos = Servico::where('status', 'ativo');
+
+        if ($orcamento_id) {
+            $orcamento = Orcamento::findOrFail($orcamento_id);
+
+            if ($orcamento->status !== 'aceito') {
+                abort(403, 'Só é possível agendar um orçamento aceito.');
+            }
+
+            $servicos->where('usuario_id', $orcamento->usuario_id);
+
+            if (! $servico_id) {
+                $servico_id = $servicos->value('id');
+            }
+        }
+
+        $servicos = $servicos->get();
 
         return view('agendamentos.create', compact('servicos', 'servico_id', 'orcamento_id'));
     }
@@ -55,15 +70,52 @@ class AgendamentoController extends Controller
         }
 
         $servico = Servico::findOrFail($request->servico_id);
+        $orcamentoId = $request->input('orcamento_id');
 
-        // Temporariamente: remover fluxo de orçamentos — permitir agendamento direto
+        if ($orcamentoId) {
+            $orcamento = Orcamento::findOrFail($orcamentoId);
+
+            if ($orcamento->status !== 'aceito') {
+                return back()->withErrors(['orcamento_id' => 'Orçamento precisa estar aceito para agendar.']);
+            }
+
+            if ($orcamento->usuario_id !== $servico->usuario_id) {
+                return back()->withErrors(['servico_id' => 'O serviço selecionado deve pertencer ao prestador do orçamento.']);
+            }
+
+            $solicitacaoId = $orcamento->solicitacao_id;
+        } else {
+            $solicitacao = Solicitacao::create([
+                'usuario_id'     => Auth::id(),
+                'titulo'         => "Solicitação de agendamento - {$servico->titulo}",
+                'descricao'      => trim("Agendamento solicitado para o serviço {$servico->titulo} em {$request->data} às {$request->horario}. " . ($request->observacoes ?? '')),
+                'categoria'      => $servico->categoria ?? 'Geral',
+                'disponibilidade'=> $request->data,
+                'status'         => 'em_andamento',
+            ]);
+
+            $orcamento = Orcamento::create([
+                'solicitacao_id' => $solicitacao->id,
+                'usuario_id'     => $servico->usuario_id,
+                'mao_de_obra'    => $servico->preco_estimado ?? 0,
+                'valor_total'    => $servico->preco_estimado ?? 0,
+                'prazo'          => 1,
+                'observacoes'    => 'Orçamento gerado automaticamente a partir do agendamento.',
+                'status'         => 'aceito',
+            ]);
+
+            $solicitacaoId = $solicitacao->id;
+            $orcamentoId = $orcamento->id;
+        }
+
         Agendamento::create([
-            'cliente_id'  => Auth::id(),
-            'servico_id'  => $request->servico_id,
-            'data'        => $request->data,
-            'horario'     => $request->horario,
-            'observacoes' => $request->observacoes,
-            'status'      => 'pendente',
+            'cliente_id'   => Auth::id(),
+            'servico_id'   => $request->servico_id,
+            'orcamento_id' => $orcamentoId,
+            'data'         => $request->data,
+            'horario'      => $request->horario,
+            'observacoes'  => $request->observacoes,
+            'status'       => 'pendente',
         ]);
 
         return redirect()->route('agendamentos.index')->with('sucesso', 'Agendamento realizado com sucesso!');
