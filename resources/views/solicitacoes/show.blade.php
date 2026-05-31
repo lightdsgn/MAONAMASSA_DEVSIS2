@@ -57,7 +57,11 @@
                 @endif
 
                 @if(Auth::id() === $solicitacao->usuario_id && $orc->status === 'aceito')
-                    <a href="{{ route('agendamentos.create') }}" class="btn btn-sm btn-primary mt-3">
+                    @php $servDefault = $orc->usuario->servicos()->where('status', 'ativo')->first(); @endphp
+                    <a href="{{ route('agendamentos.create', [
+                            'orcamento_id' => $orc->id,
+                            'servico_id'   => $servDefault?->id,
+                        ]) }}" class="btn btn-sm btn-primary mt-3">
                         <i class="bi bi-calendar-plus me-1"></i>Agendar Serviço
                     </a>
                 @endif

@@ -19,12 +19,28 @@ class SolicitacaoController extends Controller
     public function index(Request $request)
     {
         $busca = $request->busca;
-        $solicitacoes = Solicitacao::with('usuario')
-            ->when($busca, function ($query) use ($busca) {
-                $query->where('titulo', 'like', "%$busca%")
-                      ->orWhere('categoria', 'like', "%$busca%")
-                      ->orWhere('status', 'like', "%$busca%");
-            })->paginate(10);
+        $user  = Auth::user();
+
+        $query = Solicitacao::with('usuario');
+
+        // Prestador só vê solicitações abertas e ainda sem orçamento
+        if ($user->isPrestador()) {
+            $query->where('status', 'aberta')
+                  ->whereDoesntHave('orcamento');
+        }
+
+        // Cliente só vê as próprias solicitações
+        if ($user->isCliente()) {
+            $query->where('usuario_id', $user->id);
+        }
+
+        $query->when($busca, function ($q) use ($busca) {
+            $q->where('titulo', 'like', "%$busca%")
+              ->orWhere('categoria', 'like', "%$busca%")
+              ->orWhere('status', 'like', "%$busca%");
+        });
+
+        $solicitacoes = $query->latest()->paginate(10);
 
         return view('solicitacoes.index', compact('solicitacoes', 'busca'));
     }

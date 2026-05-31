@@ -77,6 +77,20 @@
                                     <button class="btn btn-sm btn-success">Confirmar</button>
                                 </form>
                             @endif
+                            @if($ag->status === 'concluido')
+                                @php
+                                    $jaAvaliou = \App\Models\Avaliacao::where('servico_id', $ag->servico_id)
+                                                    ->where('usuario_id', Auth::id())
+                                                    ->exists();
+                                @endphp
+                                @unless($jaAvaliou)
+                                    <a href="{{ route('avaliacoes.create', ['servico_id' => $ag->servico_id]) }}"
+                                       class="btn btn-sm btn-outline-warning"
+                                       title="Avaliar serviço">
+                                        <i class="bi bi-star"></i>
+                                    </a>
+                                @endunless
+                            @endif
                             <a href="{{ route('agendamentos.show', $ag) }}" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
                             <a href="{{ route('agendamentos.edit', $ag) }}" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></a>
                             <form action="{{ route('agendamentos.destroy', $ag) }}" method="POST" class="d-inline" onsubmit="return confirm('Cancelar este agendamento?')">
