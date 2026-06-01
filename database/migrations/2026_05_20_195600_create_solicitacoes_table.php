@@ -10,7 +10,10 @@ return new class extends Migration
     {
         Schema::create('solicitacoes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('usuarios')->cascadeOnDelete();
+            
+            $table->foreignId('usuario_id')->constrained('usuarios')->cascadeOnDelete(); 
+            $table->foreignId('prestador_id')->nullable()->constrained('usuarios')->nullOnDelete();
+            
             $table->string('titulo');
             $table->text('descricao');
             $table->string('categoria');

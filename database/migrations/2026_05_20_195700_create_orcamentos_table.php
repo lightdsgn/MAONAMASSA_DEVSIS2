@@ -10,8 +10,11 @@ return new class extends Migration
     {
         Schema::create('orcamentos', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('solicitacao_id')->constrained('solicitacoes')->cascadeOnDelete();
             $table->foreignId('usuario_id')->constrained('usuarios')->cascadeOnDelete();
+            $table->foreignId('servico_id')->nullable()->constrained('servicos')->nullOnDelete();
+            
             $table->decimal('mao_de_obra', 10, 2);
             $table->decimal('valor_total', 10, 2);
             $table->integer('prazo');
