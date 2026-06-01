@@ -9,9 +9,14 @@ class Avaliacao extends Model
     protected $table = 'avaliacoes';
 
     protected $fillable = [
-        'servico_id', 'usuario_id', 'nota', 'comentario',
+        'agendamento_id', 'servico_id', 'usuario_id', 'nota', 'comentario',
     ];
 
+    public function agendamento()
+    {
+        return $this->belongsTo(Agendamento::class);
+    }   
+    
     public function servico()
     {
         return $this->belongsTo(Servico::class);

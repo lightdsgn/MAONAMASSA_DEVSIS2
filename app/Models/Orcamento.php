@@ -9,7 +9,7 @@ class Orcamento extends Model
     protected $table = 'orcamentos';
 
     protected $fillable = [
-        'solicitacao_id', 'usuario_id', 'mao_de_obra',
+        'solicitacao_id', 'usuario_id', 'servico_id', 'mao_de_obra',
         'valor_total', 'prazo', 'observacoes', 'status',
     ];
 
@@ -21,5 +21,15 @@ class Orcamento extends Model
     public function usuario()
     {
         return $this->belongsTo(Usuario::class);
+    }
+    
+    public function servico()
+    {
+        return $this->belongsTo(Servico::class);
+    }
+
+    public function agendamento()
+    {
+        return $this->hasOne(Agendamento::class);
     }
 }

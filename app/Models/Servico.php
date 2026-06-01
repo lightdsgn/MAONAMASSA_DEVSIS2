@@ -32,4 +32,14 @@ class Servico extends Model
     {
         return round($this->avaliacoes()->avg('nota') ?? 0, 1);
     }
+
+    public function prestador()
+    {
+        return $this->belongsTo(Usuario::class, 'usuario_id');
+    }      
+    
+    public function orcamentos()
+    {
+        return $this->hasMany(Orcamento::class);
+    }
 }

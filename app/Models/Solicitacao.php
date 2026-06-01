@@ -18,8 +18,13 @@ class Solicitacao extends Model
         return $this->belongsTo(Usuario::class);
     }
 
-    public function orcamento()
+    public function orcamentos()
     {
-        return $this->hasOne(Orcamento::class);
+        return $this->hasMany(Orcamento::class);
     }
+
+    public function prestador()
+    {
+        return $this->belongsTo(Usuario::class, 'prestador_id');
+    }       
 }

@@ -61,4 +61,9 @@ class Usuario extends Authenticatable
     {
         return $this->hasMany(Avaliacao::class);
     }
+
+    public function solicitacoesAceitas()
+    {
+        return $this->hasMany(Solicitacao::class, 'prestador_id');
+    }
 }
