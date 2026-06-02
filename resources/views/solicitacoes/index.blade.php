@@ -185,7 +185,7 @@
         <h4 class="page-title"><i class="bi bi-clipboard-check"></i> Solicitações</h4>
         @if(Auth::user()->isCliente() || Auth::user()->isAdm())
         <a href="{{ route('solicitacoes.create') }}" class="btn-dash-fill">
-            <i class="bi bi-plus-lg"></i> Nova Solicitação
+            <i class="fa-solid fa-circle-plus"></i> Nova Solicitação
         </a>
         @endif
     </div>

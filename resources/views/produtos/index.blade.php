@@ -180,7 +180,7 @@
         <h4 class="page-title"><i class="bi bi-bag"></i> Produtos</h4>
         @if(Auth::user()->isPrestador() || Auth::user()->isAdm())
         <a href="{{ route('produtos.create') }}" class="btn-dash-fill">
-            <i class="bi bi-plus-lg"></i> Novo Produto
+            <i class="fa-solid fa-circle-plus"></i> Novo Produto
         </a>
         @endif
     </div>

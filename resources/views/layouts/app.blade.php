@@ -480,7 +480,7 @@
 
         <div class="sb-label-section">Geral</div>
         <a href="{{ route('perfil') }}" class="sb-link {{ request()->is('perfil*') ? 'active' : '' }}">
-            <i class="bi bi-person-circle sb-icon"></i>
+            <i class="fa fa-circle-user sb-icon"></i>
             <span class="sb-text">Meu Perfil</span>
         </a>
 
@@ -536,31 +536,31 @@
         @if(Auth::user()->isAdm())
             <div class="sb-label-section" style="margin-top:6px;">Administração</div>
             <a href="{{ route('dashboard') }}" class="sb-link {{ request()->is('dashboard') ? 'active' : '' }}">
-                <i class="bi bi-speedometer2 sb-icon"></i><span class="sb-text">Dashboard</span>
+                <i class="fa fa-house sb-icon"></i><span class="sb-text">Dashboard</span>
             </a>
             <a href="{{ route('usuarios.index') }}" class="sb-link {{ request()->is('usuarios*') ? 'active' : '' }}">
-                <i class="bi bi-people sb-icon"></i><span class="sb-text">Usuários</span>
+                <i class="fa fa-users sb-icon"></i><span class="sb-text">Usuários</span>
             </a>
             <a href="{{ route('servicos.index') }}" class="sb-link {{ request()->is('servicos*') ? 'active' : '' }}">
-                <i class="bi bi-tools sb-icon"></i><span class="sb-text">Serviços</span>
+                <i class="fa fa-tools sb-icon"></i><span class="sb-text">Serviços</span>
             </a>
             <a href="{{ route('produtos.index') }}" class="sb-link {{ request()->is('produtos*') ? 'active' : '' }}">
-                <i class="bi bi-bag sb-icon"></i><span class="sb-text">Produtos</span>
+                <i class="fa fa-cart-shopping sb-icon"></i><span class="sb-text">Produtos</span>
             </a>
             <a href="{{ route('solicitacoes.index') }}" class="sb-link {{ request()->is('solicitacoes*') ? 'active' : '' }}">
-                <i class="bi bi-clipboard-check sb-icon"></i><span class="sb-text">Solicitações</span>
+                <i class="fa fa-clipboard-check     sb-icon"></i><span class="sb-text">Solicitações</span>
             </a>
             <a href="{{ route('orcamentos.index') }}" class="sb-link {{ request()->is('orcamentos*') ? 'active' : '' }}">
-                <i class="bi bi-receipt sb-icon"></i><span class="sb-text">Orçamentos</span>
+                <i class="fa fa-receipt sb-icon"></i><span class="sb-text">Orçamentos</span>
             </a>
             <a href="{{ route('agendamentos.index') }}" class="sb-link {{ request()->is('agendamentos*') ? 'active' : '' }}">
-                <i class="bi bi-calendar-check sb-icon"></i><span class="sb-text">Agendamentos</span>
+                <i class="fa fa-clock sb-icon"></i><span class="sb-text">Agendamentos</span>
             </a>
             <a href="{{ route('avaliacoes.index') }}" class="sb-link {{ request()->is('avaliacoes*') ? 'active' : '' }}">
-                <i class="bi bi-star sb-icon"></i><span class="sb-text">Avaliações</span>
+                <i class="fa fa-star sb-icon"></i><span class="sb-text">Avaliações</span>
             </a>
             <a href="{{ route('pagamentos.index') }}" class="sb-link {{ request()->is('pagamentos*') ? 'active' : '' }}">
-                <i class="bi bi-credit-card sb-icon"></i><span class="sb-text">Pagamentos</span>
+                <i class="fa-solid fa-credit-card sb-icon"></i><span class="sb-text">Pagamentos</span>
             </a>
         @endif
 

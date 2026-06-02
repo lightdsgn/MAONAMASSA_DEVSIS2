@@ -203,8 +203,8 @@
         <h4 class="page-title"><i class="bi bi-receipt"></i> Orçamentos</h4>
         @if(Auth::user()->isPrestador() || Auth::user()->isAdm())
         <a href="{{ route('orcamentos.create') }}" class="btn-dash-fill">
-            <i class="bi bi-plus-lg"></i> Novo Orçamento
-        </a>
+                <i class="fa-solid fa-circle-plus"></i> Novo Orçamento
+            </a>
         @endif
     </div>
 
