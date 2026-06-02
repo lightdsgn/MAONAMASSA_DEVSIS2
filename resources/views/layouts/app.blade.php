@@ -27,10 +27,57 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+            padding: 0 24px;
             z-index: 1040;
             border-bottom: 1px solid rgba(0,0,0,0.12);
             box-shadow: 0 2px 12px rgba(250,65,1,0.25);
+        }
+        
+        /* Menu hambúrguer para celular */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            margin-left: auto;
+            margin-right: -8px;
+            transition: transform 0.3s ease;
+        }
+        .mobile-menu-toggle:active { transform: scale(0.95); }
+        
+        /* Sidebar móvel overlay */
+        .mobile-sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1030;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .mobile-sidebar-overlay.active { opacity: 1; }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle { display: block; }
+            .mobile-sidebar-overlay { display: block; }
+            .sidebar {
+                position: fixed;
+                left: -220px;
+                top: 64px;
+                height: calc(100vh - 64px);
+                z-index: 1035;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .sidebar.mobile-open { left: 0; }
+            .page-wrapper {
+                flex-direction: column;
+            }
+            .main-content {
+                width: 100%;
+            }
         }
 
         .nav-logo {
@@ -39,12 +86,33 @@
             gap: 10px;
             text-decoration: none;
             transition: opacity 0.2s;
+            margin-right: 16px;
         }
         .nav-logo:hover { opacity: 0.9; }
         .nav-logo img { height: 38px; }
+        
+        @media (max-width: 640px) {
+            .nav-logo img { height: 32px; }
+        }
 
         /* Lado direito da navbar */
-        .nav-actions { display: flex; align-items: center; gap: 8px; }
+        .nav-actions { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 640px) {
+            .nav-actions {
+                gap: 8px;
+                margin-right: 0;
+            }
+            .nav-actions .user-chip-name,
+            .nav-actions .user-tipo-badge {
+                display: none !important;
+            }
+        }
 
         /* Botão de notificações */
         .nav-icon-btn {
@@ -205,7 +273,16 @@
         .nav-btn-back:hover { background: rgba(0,0,0,0.32); color: #fff; }
 
         /* ── LAYOUT ── */
-        .page-wrapper { display: flex; min-height: calc(100vh - 64px); }
+        .page-wrapper { 
+            display: flex; 
+            min-height: calc(100vh - 64px);
+        }
+        
+        @media (max-width: 768px) {
+            .page-wrapper {
+                flex-direction: column;
+            }
+        }
 
         /* ── SIDEBAR ── */
         .sidebar {
@@ -224,8 +301,16 @@
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             scrollbar-width: thin;
             scrollbar-color: #333 transparent;
+            border-right: 1px solid #222;
         }
         .sidebar.collapsed { width: 60px; }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid #222;
+            }
+        }
 
         .sidebar::-webkit-scrollbar { width: 3px; }
         .sidebar::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
@@ -329,18 +414,18 @@
 
         @if(Route::is('login') || Route::is('registro'))
             <a href="{{ route('home') }}" class="nav-btn nav-btn-back">
-                <i class="fa-solid fa-circle-arrow-left"></i> Voltar
+                <i class="fa-solid fa-circle-arrow-left"></i>VOLTAR
             </a>
         @endif
 
         @auth
-            {{-- Notificações --}}
+       
             <a href="#" class="nav-icon-btn">
                 <i class="bi bi-bell" style="font-size:15px;"></i>
                 <span class="notif-dot"></span>
             </a>
 
-            {{-- Chip do usuário com dropdown --}}
+           
             <div class="user-chip" id="userChip">
                 <div class="user-avatar">
                     {{ strtoupper(substr(Auth::user()->nome, 0, 1)) }}{{ strtoupper(substr(strstr(Auth::user()->nome, ' '), 1, 1)) }}
@@ -384,10 +469,12 @@
     </div>
 </nav>
 
-{{-- ═══ LAYOUT PRINCIPAL ═══ --}}
+
+<div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+
+
 <div class="page-wrapper">
 
-    {{-- SIDEBAR (somente logado) --}}
     @auth
     <aside class="sidebar {{ Auth::user()->isCliente() ? 'cliente' : (Auth::user()->isPrestador() ? 'prestador' : 'adm') }}" id="sidebar">
 
@@ -478,8 +565,6 @@
         @endif
 
         <div class="sb-spacer"></div>
-
-        {{-- Botão colapsar no rodapé do sidebar --}}
         <button class="sb-toggle" id="sidebarToggle" title="Expandir/Colapsar">
             <i class="bi bi-chevron-left" id="toggleIcon"></i>
         </button>
@@ -515,7 +600,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── SIDEBAR TOGGLE ──
+  
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('sidebarToggle');
 
@@ -529,7 +614,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ── USER CHIP DROPDOWN ──
+  
     const chip = document.getElementById('userChip');
     if (chip) {
         chip.addEventListener('click', function (e) {
