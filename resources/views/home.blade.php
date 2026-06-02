@@ -57,7 +57,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 60px;
-        padding: 180px 8% 80PX;
+        padding: 30px 8% 80PX;
         position: relative;
     }
 
