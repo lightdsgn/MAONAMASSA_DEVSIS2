@@ -26,7 +26,7 @@ class SolicitacaoController extends Controller
         // Prestador só vê solicitações abertas e ainda sem orçamento
         if ($user->isPrestador()) {
             $query->where('status', 'aberta')
-                  ->whereDoesntHave('orcamento');
+                  ->whereDoesntHave('orcamentos');
         }
 
         // Cliente só vê as próprias solicitações
@@ -114,6 +114,23 @@ class SolicitacaoController extends Controller
 
         $solicitacao->update($data);
         return redirect()->route('solicitacoes.index')->with('sucesso', 'Solicitação atualizada!');
+    }
+
+    public function aceitar(Solicitacao $solicitacao)
+    {
+        if (!Auth::user()->isPrestador()) {
+            abort(403, 'Acesso negado.');
+        }
+
+        if ($solicitacao->prestador_id) {
+            return back()->with('erro', 'Esta solicitação já foi aceita.');
+        }
+
+        $solicitacao->update([
+            'prestador_id' => Auth::id(),
+        ]);
+
+        return back()->with('sucesso', 'Solicitação aceita.');
     }
 
     public function destroy(Solicitacao $solicitacao)

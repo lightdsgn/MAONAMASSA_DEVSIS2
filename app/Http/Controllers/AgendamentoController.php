@@ -25,8 +25,12 @@ class AgendamentoController extends Controller
         }
 
         if ($busca) {
-            $query->whereHas('servico', fn($q) => $q->where('titulo', 'like', "%$busca%"))
-                  ->orWhere('status', 'like', "%$busca%");
+            $query->where(function ($q) use ($busca) {
+                $q->whereHas('servico', function ($sub) use ($busca) {
+                    $sub->where('titulo', 'like', "%{$busca}%");
+                })
+                ->orWhere('status', 'like', "%{$busca}%");
+            });
         }
 
         $agendamentos = $query->orderByDesc('data')->paginate(10);
@@ -83,7 +87,6 @@ class AgendamentoController extends Controller
                 return back()->withErrors(['servico_id' => 'O serviço selecionado deve pertencer ao prestador do orçamento.']);
             }
 
-            $solicitacaoId = $orcamento->solicitacao_id;
         } else {
             $solicitacao = Solicitacao::create([
                 'usuario_id'     => Auth::id(),
@@ -104,7 +107,6 @@ class AgendamentoController extends Controller
                 'status'         => 'aceito',
             ]);
 
-            $solicitacaoId = $solicitacao->id;
             $orcamentoId = $orcamento->id;
         }
 
@@ -160,7 +162,15 @@ class AgendamentoController extends Controller
     public function destroy(Agendamento $agendamento)
     {
         $this->authorize($agendamento);
+
+        if ($agendamento->status === 'concluido') {
+            return back()->withErrors([
+                'status' => 'Agendamentos concluídos não podem ser removidos.'
+            ]);
+        }
+
         $agendamento->delete();
+
         return redirect()->route('agendamentos.index')->with('sucesso', 'Agendamento cancelado!');
     }
 
@@ -169,6 +179,11 @@ class AgendamentoController extends Controller
         $user = Auth::user();
         if (! $user->isPrestador() || $agendamento->servico->usuario_id !== $user->id) {
             abort(403, 'Acesso negado.');
+        }
+        if ($agendamento->status !== 'pendente') {
+            return back()->withErrors([
+                'status' => 'Somente agendamentos pendentes podem ser confirmados.'
+            ]);
         }
 
         $agendamento->update(['status' => 'confirmado']);
@@ -181,6 +196,11 @@ class AgendamentoController extends Controller
         if (! $user->isPrestador() || $agendamento->servico->usuario_id !== $user->id) {
             abort(403, 'Acesso negado.');
         }
+        if ($agendamento->status !== 'pendente') {
+            return back()->withErrors([
+                'status' => 'Somente agendamentos pendentes podem ser recusados.'
+            ]);
+        }
 
         $agendamento->update(['status' => 'cancelado']);
         return back()->with('sucesso', 'Agendamento recusado.');
@@ -189,16 +209,28 @@ class AgendamentoController extends Controller
     public function concluir(Agendamento $agendamento)
     {
         $user = Auth::user();
-        if (! $user->isCliente() || $agendamento->cliente_id !== $user->id) {
+
+        if (! $user->isPrestador() || $agendamento->servico->usuario_id !== $user->id) {
             abort(403, 'Acesso negado.');
         }
 
         if ($agendamento->status !== 'confirmado') {
-            return back()->withErrors(['status' => 'Só é possível confirmar a execução após o prestador aceitar o agendamento.']);
+            return back()->withErrors([
+                'status' => 'Somente agendamentos confirmados podem ser concluídos.'
+            ]);
         }
 
-        $agendamento->update(['status' => 'concluido']);
-        return back()->with('sucesso', 'Serviço confirmado como concluído.');
+        $agendamento->update([
+            'status' => 'concluido'
+        ]);
+
+        if ($agendamento->orcamento?->solicitacao) {
+            $agendamento->orcamento->solicitacao->update([
+                'status' => 'concluida'
+            ]);
+        }
+
+        return back()->with('sucesso', 'Serviço concluído.');
     }
 
     private function authorize(Agendamento $agendamento): void

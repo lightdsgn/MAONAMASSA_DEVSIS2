@@ -1,33 +1,17 @@
 Cliente cria solicitação
-
 ↓
-
 Prestador aceita
-
 ↓
-
 Solicitação recebe prestador_id
-
 ↓
-
-Prestador cria orçamento
-
+Prestador cria orçamento (pendente)
 ↓
-
-Cliente aceita
-
+Cliente aceita orçamento (aceito)
 ↓
-
-Cliente cria agendamento
-
+Cliente cria agendamento (pendente)
 ↓
-
-Prestador aceita
-
+Prestador aceita agendamento (confirmado)
 ↓
-
-Executa
-
+Prestador conclui (concluido)
 ↓
-
-Avaliação
+Cliente avalia

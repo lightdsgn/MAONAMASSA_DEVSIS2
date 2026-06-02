@@ -39,13 +39,14 @@ class OrcamentoController extends Controller
     public function create()
     {
         $this->checkPrestador();
-        $solicitacoes = Solicitacao::whereDoesntHave('orcamento')->get();
+        $solicitacoes = Solicitacao::whereDoesntHave('orcamentos')->get();
         return view('orcamentos.create', compact('solicitacoes'));
     }
 
     public function store(Request $request)
     {
         $this->checkPrestador();
+
         $request->validate([
             'solicitacao_id' => 'required|exists:solicitacoes,id|unique:orcamentos,solicitacao_id',
             'mao_de_obra'    => 'required|numeric|min:0',
@@ -54,12 +55,28 @@ class OrcamentoController extends Controller
             'observacoes'    => 'nullable|string',
         ]);
 
-        $data = $request->only(['solicitacao_id', 'mao_de_obra', 'valor_total', 'prazo', 'observacoes']);
+        $solicitacao = Solicitacao::findOrFail($request->solicitacao_id);
+
+        if ($solicitacao->prestador_id !== Auth::id()) {
+            abort(403, 'Você só pode orçar solicitações aceitas por você.');
+        }
+
+        $data = $request->only([
+            'solicitacao_id',
+            'mao_de_obra',
+            'valor_total',
+            'prazo',
+            'observacoes'
+        ]);
+
         $data['usuario_id'] = Auth::id();
         $data['status'] = 'pendente';
 
         Orcamento::create($data);
-        return redirect()->route('orcamentos.index')->with('sucesso', 'Orçamento cadastrado!');
+
+        return redirect()
+            ->route('orcamentos.index')
+            ->with('sucesso', 'Orçamento cadastrado!');
     }
 
     public function show(Orcamento $orcamento)
@@ -73,7 +90,7 @@ class OrcamentoController extends Controller
         if (Auth::user()->tipo !== 'adm' && $orcamento->usuario_id !== Auth::id()) {
             abort(403, 'Você não pode editar o orçamento de outro prestador.');
         }
-        $solicitacoes = Solicitacao::whereDoesntHave('orcamento')
+        $solicitacoes = Solicitacao::whereDoesntHave('orcamentos')
             ->orWhere('id', $orcamento->solicitacao_id)->get();
         return view('orcamentos.edit', compact('orcamento', 'solicitacoes'));
     }
@@ -135,7 +152,6 @@ class OrcamentoController extends Controller
         }
 
         $orcamento->update(['status' => 'recusado']);
-        $orcamento->solicitacao->update(['status' => 'cancelada']);
 
         return redirect()->route('orcamentos.show', $orcamento)->with('sucesso', 'Orçamento recusado!');
     }

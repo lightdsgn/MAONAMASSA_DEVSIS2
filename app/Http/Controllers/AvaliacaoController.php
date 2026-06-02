@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Avaliacao;
 use App\Models\Servico;
+use App\Models\Agendamento;
 
 class AvaliacaoController extends Controller
 {
@@ -14,7 +15,7 @@ class AvaliacaoController extends Controller
         $busca = $request->busca;
         $user  = Auth::user();
 
-        $query = Avaliacao::with(['servico.usuario', 'usuario']);
+        $query = Avaliacao::with(['servico.usuario', 'usuario', 'agendamento']);
 
         if ($user->isPrestador()) {
             $query->whereHas('servico', fn($q) => $q->where('usuario_id', $user->id));
@@ -37,14 +38,15 @@ class AvaliacaoController extends Controller
             abort(403, 'Acesso negado.');
         }
 
-        $servico_id = $request->servico_id;
-        $servicos   = Servico::where('status', 'ativo')
-            ->whereHas('agendamentos', function ($query) {
-                $query->where('cliente_id', Auth::id())
-                      ->where('status', 'concluido');
-            })->get();
+        $agendamento_id = $request->agendamento_id;
 
-        return view('avaliacoes.create', compact('servicos', 'servico_id'));
+        $agendamentos = Agendamento::with('servico')
+            ->where('cliente_id', Auth::id())
+            ->where('status', 'concluido')
+            ->whereDoesntHave('avaliacoes')
+            ->get();
+
+        return view('avaliacoes.create', compact('agendamentos', 'agendamento_id'));
     }
 
     public function store(Request $request)
@@ -54,34 +56,39 @@ class AvaliacaoController extends Controller
         }
 
         $request->validate([
-            'servico_id'  => 'required|exists:servicos,id',
-            'nota'        => 'required|integer|min:1|max:5',
-            'comentario'  => 'nullable|string|max:1000',
+            'agendamento_id' => 'required|exists:agendamentos,id',
+            'nota'           => 'required|integer|min:1|max:5',
+            'comentario'     => 'nullable|string|max:1000',
         ]);
 
-        $jaAvaliou = Avaliacao::where('servico_id', $request->servico_id)
-                               ->where('usuario_id', Auth::id())
-                               ->exists();
+        $agendamento = Agendamento::with('servico')->findOrFail($request->agendamento_id);
 
-        if ($jaAvaliou) {
-            return back()->withErrors(['servico_id' => 'Você já avaliou este serviço.']);
+        if ($agendamento->cliente_id !== Auth::id()) {
+            abort(403, 'Acesso negado.');
         }
 
-        $temAgendamentoConcluido = Servico::where('id', $request->servico_id)
-            ->whereHas('agendamentos', function ($query) {
-                $query->where('cliente_id', Auth::id())
-                      ->where('status', 'concluido');
-            })->exists();
+        if ($agendamento->status !== 'concluido') {
+            return back()->withErrors([
+                'agendamento_id' => 'Você só pode avaliar agendamentos concluídos.'
+            ]);
+        }
 
-        if (! $temAgendamentoConcluido) {
-            return back()->withErrors(['servico_id' => 'Você só pode avaliar serviços com agendamento concluído.']);
+        $jaAvaliou = Avaliacao::where('agendamento_id', $agendamento->id)
+            ->where('usuario_id', Auth::id())
+            ->exists();
+
+        if ($jaAvaliou) {
+            return back()->withErrors([
+                'agendamento_id' => 'Você já avaliou este agendamento.'
+            ]);
         }
 
         Avaliacao::create([
-            'servico_id'  => $request->servico_id,
-            'usuario_id'  => Auth::id(),
-            'nota'        => $request->nota,
-            'comentario'  => $request->comentario,
+            'agendamento_id' => $agendamento->id,
+            'servico_id'     => $agendamento->servico_id,
+            'usuario_id'     => Auth::id(),
+            'nota'           => $request->nota,
+            'comentario'     => $request->comentario,
         ]);
 
         return redirect()->route('avaliacoes.index')->with('sucesso', 'Avaliação registrada!');
@@ -95,10 +102,13 @@ class AvaliacaoController extends Controller
     public function destroy(Avaliacao $avaliacao)
     {
         $user = Auth::user();
+
         if (!$user->isAdm() && $avaliacao->usuario_id !== $user->id) {
             abort(403, 'Acesso negado.');
         }
+
         $avaliacao->delete();
+
         return redirect()->route('avaliacoes.index')->with('sucesso', 'Avaliação removida!');
     }
 }
