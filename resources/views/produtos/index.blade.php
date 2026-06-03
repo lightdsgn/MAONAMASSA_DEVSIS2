@@ -136,12 +136,12 @@
         border: 1.5px solid; text-decoration: none; background: transparent;
         flex-shrink: 0;
     }
-    .act-view   { border-color: #bde0ff; color: #0d6efd; }
-    .act-view:hover   { background: #ebf2ff; color: #0d6efd; }
-    .act-edit   { border-color: #fde9a2; color: #b07d00; }
-    .act-edit:hover   { background: #fdf6e3; color: #b07d00; }
-    .act-delete { border-color: #ffc9b8; color: #c73200; }
-    .act-delete:hover { background: #fff1ec; color: #c73200; }
+        .act-view   { border:none; color: #ffffff;background: #fa4101; }
+    .act-view:hover   { background: #c93200;  }
+    .act-edit   { border:none; color: #ffffff;background: #fa4101; }
+    .act-edit:hover   { background: #c93200;  }
+    .act-delete { border:none; color: #ffffff;background: #da0101; }
+    .act-delete:hover { background: #b80000;  }
 
     .empty-state {
         grid-column: 1 / -1; padding: 60px 20px; text-align: center;
@@ -177,7 +177,7 @@
 <div class="dash">
 
     <div class="page-header">
-        <h4 class="page-title"><i class="bi bi-bag"></i> Produtos</h4>
+        <h4 class="page-title"><i class="fa-solid fa-cart-shopping"></i> Produtos</h4>
         @if(Auth::user()->isPrestador() || Auth::user()->isAdm())
         <a href="{{ route('produtos.create') }}" class="btn-dash-fill">
             <i class="fa-solid fa-circle-plus"></i> Novo Produto
@@ -207,7 +207,7 @@
                 <img src="{{ asset('storage/'.$p->foto) }}" class="prod-img" alt="{{ $p->nome }}">
             @else
                 <div class="prod-img-placeholder">
-                    <i class="bi bi-bag"></i>
+                    <i class="fa-solid fa-bag-shopping"></i>
                     <span>Sem imagem</span>
                 </div>
             @endif
@@ -220,9 +220,9 @@
 
                 <div class="prod-meta">
                     @if($p->categoria)
-                    <div class="prod-meta-item"><i class="bi bi-tag"></i><span>{{ $p->categoria }}</span></div>
+                    <div class="prod-meta-item"><i class="fa fa-tag"></i><span>{{ $p->categoria }}</span></div>
                     @endif
-                    <div class="prod-meta-item"><i class="bi bi-person"></i><strong>{{ $p->usuario->nome }}</strong></div>
+                    <div class="prod-meta-item"><i class="fa fa-person"></i><strong>{{ $p->usuario->nome }}</strong></div>
                 </div>
 
                 <div class="prod-bottom">
@@ -238,19 +238,19 @@
             </div>
 
             <div class="prod-footer">
-                <a href="{{ route('produtos.show', $p) }}" class="act-btn act-view" title="Ver"><i class="bi bi-eye"></i></a>
+                <a href="{{ route('produtos.show', $p) }}" class="act-btn act-view" title="Ver"><i class="fa-solid fa-eye"></i></a>
                 @if(Auth::user()->isAdm() || $p->usuario_id === Auth::id())
-                <a href="{{ route('produtos.edit', $p) }}" class="act-btn act-edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                <a href="{{ route('produtos.edit', $p) }}" class="act-btn act-edit" title="Editar"><i class="fa-solid fa-pencil"></i></a>
                 <form action="{{ route('produtos.destroy', $p) }}" method="POST" class="d-inline" onsubmit="return confirm('Excluir produto?')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="bi bi-trash"></i></button>
+                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
                 </form>
                 @endif
             </div>
         </div>
         @empty
         <div class="empty-state">
-            <i class="bi bi-bag"></i>
+            <i class="fa-solid fa-cart-shopping"></i>
             <p>Nenhum produto encontrado{{ ($busca ?? false) ? ' para "'.$busca.'"' : '' }}.</p>
         </div>
         @endforelse

@@ -99,7 +99,7 @@
         display: flex; align-items: center; gap: 7px;
     }
 
-    /* autor badge */
+  
     .autor-badge {
         display: flex; align-items: center; gap: 6px;
         font-size: 0.75rem; font-weight: 700; color: #888;
@@ -120,8 +120,12 @@
         border: 1.5px solid; text-decoration: none; background: transparent;
         flex-shrink: 0;
     }
-    .act-delete { border-color: #ffc9b8; color: #c73200; }
-    .act-delete:hover { background: #fff1ec; color: #c73200; }
+        .act-view   { border:none; color: #ffffff;background: #fa4101; }
+    .act-view:hover   { background: #c93200;  }
+    .act-edit   { border:none; color: #ffffff;background: #fa4101; }
+    .act-edit:hover   { background: #c93200;  }
+    .act-delete { border:none; color: #ffffff;background: #da0101; }
+    .act-delete:hover { background: #b80000;  }
 
     .empty-state {
         grid-column: 1 / -1; padding: 60px 20px; text-align: center;
@@ -157,10 +161,10 @@
 <div class="dash">
 
     <div class="page-header">
-        <h4 class="page-title"><i class="bi bi-star"></i> Avaliações</h4>
+        <h4 class="page-title"><i class="fa-solid fa-star"></i> Avaliações</h4>
         @if(Auth::user()->isCliente())
         <a href="{{ route('avaliacoes.create') }}" class="btn-dash-fill">
-            <i class="bi bi-plus-lg"></i> Nova Avaliação
+            <i class="fa-solid fa-circle-plus"></i> Nova Avaliação
         </a>
         @endif
     </div>
@@ -178,7 +182,7 @@
                     <div style="display:flex;align-items:center;gap:4px;">
                         <div class="stars">
                             @for($s = 1; $s <= 5; $s++)
-                                <i class="bi bi-star{{ $s <= $av->nota ? '-fill star-fill' : ' star-empty' }}"></i>
+                                <i class="fa-solid fa-star{{ $s <= $av->nota ? '-fill star-fill' : ' star-empty' }}"></i>
                             @endfor
                         </div>
                         <span class="nota-num">{{ $av->nota }}/5</span>
@@ -187,11 +191,11 @@
 
                 <div class="av-meta">
                     <div class="av-meta-item">
-                        <i class="bi bi-person-gear"></i>
+                        <i class="fa-solid fa-person-gear"></i>
                         <span>Prestador: <strong>{{ $av->servico->usuario->nome }}</strong></span>
                     </div>
                     <div class="av-meta-item">
-                        <i class="bi bi-person-check"></i>
+                        <i class="fa-solid fa-person-check"></i>
                         <span>Avaliado por: <strong>{{ $av->usuario->nome }}</strong></span>
                     </div>
                 </div>
@@ -209,7 +213,7 @@
                 <form action="{{ route('avaliacoes.destroy', $av) }}" method="POST" class="d-inline"
                     onsubmit="return confirm('Remover avaliação?')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="bi bi-trash"></i></button>
+                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
                 </form>
                 @endif
 
@@ -222,7 +226,7 @@
         </div>
         @empty
         <div class="empty-state">
-            <i class="bi bi-star"></i>
+            <i class="fa-solid fa-star"></i>
             <p>Nenhuma avaliação encontrada.</p>
         </div>
         @endforelse

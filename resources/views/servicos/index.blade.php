@@ -166,12 +166,12 @@
         border: 1.5px solid; text-decoration: none; background: transparent;
         flex-shrink: 0;
     }
-    .act-view   { border-color: #bde0ff; color: #0d6efd; }
-    .act-view:hover   { background: #ebf2ff; color: #0d6efd; }
-    .act-edit   { border-color: #fde9a2; color: #b07d00; }
-    .act-edit:hover   { background: #fdf6e3; color: #b07d00; }
-    .act-delete { border-color: #ffc9b8; color: #c73200; }
-    .act-delete:hover { background: #fff1ec; color: #c73200; }
+    .act-view   { border:none; color: #ffffff;background: #fa4101; }
+    .act-view:hover   { background: #c93200;  }
+    .act-edit   { border:none; color: #ffffff;background: #fa4101; }
+    .act-edit:hover   { background: #c93200;  }
+    .act-delete { border:none; color: #ffffff;background: #da0101; }
+    .act-delete:hover { background: #b80000;  }
 
     .act-agendar {
         margin-left: auto;
@@ -222,7 +222,7 @@
 <div class="dash">
 
     <div class="page-header">
-        <h4 class="page-title"><i class="bi bi-tools"></i> Serviços</h4>
+        <h4 class="page-title"><i class="fa-solid fa-tools"></i> Serviços</h4>
         @if(Auth::user()->isPrestador() || Auth::user()->isAdm())
         <a href="{{ route('servicos.create') }}" class="btn-dash-fill">
             <i class="fa-solid fa-circle-plus"></i> Novo Serviço
@@ -250,7 +250,7 @@
                 <img src="{{ asset('storage/'.$servico->foto) }}" class="serv-img" alt="{{ $servico->titulo }}">
             @else
                 <div class="serv-img-placeholder">
-                    <i class="bi bi-tools"></i>
+                    <i class="fa-solid fa-tools"></i>
                     <span>Sem imagem</span>
                 </div>
             @endif
@@ -267,12 +267,12 @@
                 <div class="serv-meta">
                     @if($servico->categoria)
                     <div class="serv-meta-item">
-                        <i class="bi bi-tag"></i>
+                        <i class="fa-solid fa-tag"></i>
                         <span>{{ $servico->categoria }}</span>
                     </div>
                     @endif
                     <div class="serv-meta-item">
-                        <i class="bi bi-person"></i>
+                        <i class="fa-solid fa-person"></i>
                         <strong>{{ $servico->usuario->nome }}</strong>
                     </div>
                 </div>
@@ -300,27 +300,27 @@
 
             {{-- FOOTER --}}
             <div class="serv-footer">
-                <a href="{{ route('servicos.show', $servico) }}" class="act-btn act-view" title="Ver"><i class="bi bi-eye"></i></a>
+                <a href="{{ route('servicos.show', $servico) }}" class="act-btn act-view" title="Ver"><i class="fa-solid fa-eye"></i></a>
 
                 @if(Auth::user()->isAdm() || $servico->usuario_id === Auth::id())
-                <a href="{{ route('servicos.edit', $servico) }}" class="act-btn act-edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                <a href="{{ route('servicos.edit', $servico) }}" class="act-btn act-edit" title="Editar"><i class="fa-solid fa-pencil"></i></a>
                 <form action="{{ route('servicos.destroy', $servico) }}" method="POST" class="d-inline"
                     onsubmit="return confirm('Excluir este serviço?')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="bi bi-trash"></i></button>
+                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
                 </form>
                 @endif
 
                 @if(Auth::user()->isCliente())
                 <a href="{{ route('agendamentos.create', ['servico_id' => $servico->id]) }}" class="act-agendar">
-                    <i class="bi bi-calendar-check"></i> Agendar
+                    <i class="fa-solid fa-calendar-check"></i> Agendar
                 </a>
                 @endif
             </div>
         </div>
         @empty
         <div class="empty-state">
-            <i class="bi bi-tools"></i>
+            <i class="fa-solid fa-tools"></i>
             <p>Nenhum serviço encontrado{{ ($busca ?? false) ? ' para "'.$busca.'"' : '' }}.</p>
         </div>
         @endforelse

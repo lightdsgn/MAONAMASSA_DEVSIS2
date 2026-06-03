@@ -146,12 +146,12 @@
         border: 1.5px solid; text-decoration: none; background: transparent;
         flex-shrink: 0;
     }
-    .act-view   { border-color: #bde0ff; color: #0d6efd; }
-    .act-view:hover   { background: #ebf2ff; color: #0d6efd; }
-    .act-edit   { border-color: #fde9a2; color: #b07d00; }
-    .act-edit:hover   { background: #fdf6e3; color: #b07d00; }
-    .act-delete { border-color: #ffc9b8; color: #c73200; }
-    .act-delete:hover { background: #fff1ec; color: #c73200; }
+        .act-view   { border:none; color: #ffffff;background: #fa4101; }
+    .act-view:hover   { background: #c93200;  }
+    .act-edit   { border:none; color: #ffffff;background: #fa4101; }
+    .act-edit:hover   { background: #c93200;  }
+    .act-delete { border:none; color: #ffffff;background: #da0101; }
+    .act-delete:hover { background: #b80000;  }
 
     /* ícone de método de pagamento */
     .metodo-pix        { background: #e8f6ef; color: #145c37; }
@@ -193,10 +193,10 @@
 <div class="dash">
 
     <div class="page-header">
-        <h4 class="page-title"><i class="bi bi-credit-card"></i> Pagamentos</h4>
+        <h4 class="page-title"><i class="fa-solid fa-credit-card"></i> Pagamentos</h4>
         @if(Auth::user()->isAdm() || Auth::user()->isPrestador())
         <a href="{{ route('pagamentos.create') }}" class="btn-dash-fill">
-            <i class="bi bi-plus-lg"></i> Registrar Pagamento
+            <i class="fa-solid fa-circle-plus"></i> Registrar Pagamento
         </a>
         @endif
     </div>
@@ -250,11 +250,11 @@
 
                 <div class="pag-meta">
                     <div class="pag-meta-item">
-                        <i class="bi bi-person"></i>
+                        <i class="fa-solid fa-person"></i>
                         <span>Cliente: <strong>{{ $pag->agendamento->cliente->nome }}</strong></span>
                     </div>
                     <div class="pag-meta-item">
-                        <i class="bi bi-person-gear"></i>
+                        <i class="fa-solid fa-person-gear"></i>
                         <span>Prestador: <strong>{{ $pag->agendamento->servico->usuario->nome }}</strong></span>
                     </div>
                 </div>
@@ -267,15 +267,15 @@
                         </div>
                         @if($pag->data_pagamento)
                         <div class="data-pgto">
-                            <i class="bi bi-calendar-check"></i>
+                            <i class="fa-solid fa-calendar-check"></i>
                             {{ \Carbon\Carbon::parse($pag->data_pagamento)->format('d/m/Y') }}
                         </div>
                         @else
-                        <div class="data-pgto"><i class="bi bi-calendar-x"></i> Sem data</div>
+                        <div class="data-pgto"><i class="fa-solid fa-calendar-x"></i> Sem data</div>
                         @endif
                     </div>
                     <div class="metodo-badge metodo-{{ $metodoSlug }}">
-                        <i class="bi {{ $metodoIcon }}"></i>
+                        <i class="fa-solid {{ $metodoIcon }}"></i>
                         {{ str_replace('_', ' ', $pag->metodo) }}
                     </div>
                 </div>
@@ -283,17 +283,17 @@
             </div>
 
             <div class="pag-footer">
-                <a href="{{ route('pagamentos.show', $pag) }}" class="act-btn act-view" title="Ver"><i class="bi bi-eye"></i></a>
+                <a href="{{ route('pagamentos.show', $pag) }}" class="act-btn act-view" title="Ver"><i class="fa-solid fa-eye"></i></a>
 
                 @if(Auth::user()->isAdm() || Auth::user()->isPrestador())
-                <a href="{{ route('pagamentos.edit', $pag) }}" class="act-btn act-edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                <a href="{{ route('pagamentos.edit', $pag) }}" class="act-btn act-edit" title="Editar"><i class="fa-solid fa-pencil"></i></a>
                 @endif
 
                 @if(Auth::user()->isAdm())
                 <form action="{{ route('pagamentos.destroy', $pag) }}" method="POST" class="d-inline"
                     onsubmit="return confirm('Remover este pagamento?')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="bi bi-trash"></i></button>
+                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
                 </form>
                 @endif
             </div>
@@ -301,7 +301,7 @@
         </div>
         @empty
         <div class="empty-state">
-            <i class="bi bi-credit-card"></i>
+            <i class="fa-solid fa-credit-card"></i>
             <p>Nenhum pagamento encontrado{{ ($busca ?? false) ? ' para "'.$busca.'"' : '' }}.</p>
         </div>
         @endforelse

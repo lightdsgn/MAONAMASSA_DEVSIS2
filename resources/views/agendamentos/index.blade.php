@@ -147,12 +147,13 @@
         border: 1.5px solid; text-decoration: none; background: transparent;
         flex-shrink: 0;
     }
-    .act-view   { border-color: #bde0ff; color: #0d6efd; }
-    .act-view:hover   { background: #ebf2ff; color: #0d6efd; }
-    .act-edit   { border-color: #fde9a2; color: #b07d00; }
-    .act-edit:hover   { background: #fdf6e3; color: #b07d00; }
-    .act-delete { border-color: #ffc9b8; color: #c73200; }
-    .act-delete:hover { background: #fff1ec; color: #c73200; }
+    .act-view   { border:none; color: #ffffff;background: #fa4101; }
+    .act-view:hover   { background: #c93200;  }
+    .act-edit   { border:none; color: #ffffff;background: #fa4101; }
+    .act-edit:hover   { background: #c93200;  }
+    .act-delete { border:none; color: #ffffff;background: #da0101; }
+    .act-delete:hover { background: #b80000;  }
+    
     .act-accept { border-color: #b2e8c8; color: #145c37; }
     .act-accept:hover { background: #e8f6ef; color: #145c37; }
     .act-reject { border-color: #ffd5c2; color: #c73200; }
@@ -320,12 +321,12 @@
                         @endunless
                     @endif
 
-                    <a href="{{ route('agendamentos.show', $ag) }}" class="act-btn act-view" title="Ver"><i class="bi bi-eye"></i></a>
-                    <a href="{{ route('agendamentos.edit', $ag) }}" class="act-btn act-edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                    <a href="{{ route('agendamentos.show', $ag) }}" class="act-btn act-view" title="Ver"><i class="fa-solid fa-eye"></i></a>
+                    <a href="{{ route('agendamentos.edit', $ag) }}" class="act-btn act-edit" title="Editar"><i class="fa-solid fa-pencil"></i></a>
                     <form action="{{ route('agendamentos.destroy', $ag) }}" method="POST" class="d-inline"
                         onsubmit="return confirm('Cancelar este agendamento?')">
                         @csrf @method('DELETE')
-                        <button type="submit" class="act-btn act-delete" title="Cancelar"><i class="bi bi-trash"></i></button>
+                        <button type="submit" class="act-btn act-delete" title="Cancelar"><i class="fa-solid fa-trash"></i></button>
                     </form>
                 @endif
 

@@ -141,12 +141,12 @@
         border: 1.5px solid; text-decoration: none; background: transparent;
         flex-shrink: 0;
     }
-    .act-view   { border-color: #bde0ff; color: #0d6efd; }
-    .act-view:hover   { background: #ebf2ff; color: #0d6efd; }
-    .act-edit   { border-color: #fde9a2; color: #b07d00; }
-    .act-edit:hover   { background: #fdf6e3; color: #b07d00; }
-    .act-delete { border-color: #ffc9b8; color: #c73200; }
-    .act-delete:hover { background: #fff1ec; color: #c73200; }
+    .act-view   { border:none; color: #ffffff;background: #fa4101; }
+    .act-view:hover   { background: #c93200;  }
+    .act-edit   { border:none; color: #ffffff;background: #fa4101; }
+    .act-edit:hover   { background: #c93200;  }
+    .act-delete { border:none; color: #ffffff;background: #da0101; }
+    .act-delete:hover { background: #b80000;  }
 
     .empty-state {
         grid-column: 1 / -1; padding: 60px 20px; text-align: center;
@@ -182,7 +182,7 @@
 <div class="dash">
 
     <div class="page-header">
-        <h4 class="page-title"><i class="bi bi-clipboard-check"></i> Solicitações</h4>
+        <h4 class="page-title"><i class="fa-solid fa-clipboard-check"></i> Solicitações</h4>
         @if(Auth::user()->isCliente() || Auth::user()->isAdm())
         <a href="{{ route('solicitacoes.create') }}" class="btn-dash-fill">
             <i class="fa-solid fa-circle-plus"></i> Nova Solicitação
@@ -194,9 +194,9 @@
         <input type="text" name="busca" class="search-input"
             placeholder="Buscar por título, categoria ou status..."
             value="{{ $busca ?? '' }}">
-        <button type="submit" class="search-btn"><i class="bi bi-search"></i></button>
+        <button type="submit" class="search-btn"><i class="fa-solid fa-search"></i></button>
         @if($busca ?? false)
-        <a href="{{ route('solicitacoes.index') }}" class="clear-btn"><i class="bi bi-x"></i> Limpar</a>
+        <a href="{{ route('solicitacoes.index') }}" class="clear-btn"><i class="fa-solid fa-x"></i> Limpar</a>
         @endif
     </form>
 
@@ -222,36 +222,36 @@
 
                 <div class="solic-meta">
                     @if($s->categoria)
-                    <div class="solic-meta-item"><i class="bi bi-tag"></i><span>{{ $s->categoria }}</span></div>
+                    <div class="solic-meta-item"><i class="fa-solid fa-tag"></i><span>{{ $s->categoria }}</span></div>
                     @endif
-                    <div class="solic-meta-item"><i class="bi bi-person"></i><strong>{{ $s->usuario->nome }}</strong></div>
+                    <div class="solic-meta-item"><i class="fa-solid fa-person"></i><strong>{{ $s->usuario->nome }}</strong></div>
                 </div>
 
                 <div class="solic-bottom">
                     <div class="data-badge">
-                        <i class="bi bi-calendar3"></i>
+                        <i class="fa-solid fa-calendar3"></i>
                         {{ $s->disponibilidade ? \Carbon\Carbon::parse($s->disponibilidade)->format('d/m/Y') : 'Sem data' }}
                     </div>
                     @if($s->orcamento)
                         <div class="orcamento-badge orcamento-sim">
-                            <i class="bi bi-check-circle" style="font-size:12px;"></i> Com orçamento
+                            <i class="fa-solid fa-check-circle" style="font-size:12px;"></i> Com orçamento
                         </div>
                     @else
                         <div class="orcamento-badge orcamento-nao">
-                            <i class="bi bi-dash-circle" style="font-size:12px;"></i> Sem orçamento
+                            <i class="fa-solid fa-dash-circle" style="font-size:12px;"></i> Sem orçamento
                         </div>
                     @endif
                 </div>
             </div>
 
             <div class="solic-footer">
-                <a href="{{ route('solicitacoes.show', $s) }}" class="act-btn act-view" title="Ver"><i class="bi bi-eye"></i></a>
+                <a href="{{ route('solicitacoes.show', $s) }}" class="act-btn act-view" title="Ver"><i class="fa-solid fa-eye"></i></a>
                 @if(Auth::user()->isAdm() || $s->usuario_id === Auth::id())
-                <a href="{{ route('solicitacoes.edit', $s) }}" class="act-btn act-edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                <a href="{{ route('solicitacoes.edit', $s) }}" class="act-btn act-edit" title="Editar"><i class="fa-solid fa-pencil"></i></a>
                 <form action="{{ route('solicitacoes.destroy', $s) }}" method="POST" class="d-inline"
                     onsubmit="return confirm('Excluir esta solicitação?')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="bi bi-trash"></i></button>
+                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
                 </form>
                 @endif
             </div>

@@ -153,14 +153,13 @@
         border: 1.5px solid; text-decoration: none; background: transparent;
         flex-shrink: 0;
     }
-    .act-view   { border-color: #bde0ff; color: #0d6efd; }
-    .act-view:hover   { background: #ebf2ff; color: #0d6efd; }
-    .act-edit   { border-color: #fde9a2; color: #b07d00; }
-    .act-edit:hover   { background: #fdf6e3; color: #b07d00; }
-    .act-delete { border-color: #ffc9b8; color: #c73200; }
-    .act-delete:hover { background: #fff1ec; color: #c73200; }
-
-    /* aceitar/recusar para clientes */
+    .act-view   { border:none; color: #ffffff;background: #fa4101; }
+    .act-view:hover   { background: #c93200;  }
+    .act-edit   { border:none; color: #ffffff;background: #fa4101; }
+    .act-edit:hover   { background: #c93200;  }
+    .act-delete { border:none; color: #ffffff;background: #da0101; }
+    .act-delete:hover { background: #b80000;  }
+  
     .act-accept { border-color: #b2e8c8; color: #145c37; }
     .act-accept:hover { background: #e8f6ef; color: #145c37; }
     .act-reject { border-color: #ffd5c2; color: #c73200; }
@@ -200,7 +199,7 @@
 <div class="dash">
 
     <div class="page-header">
-        <h4 class="page-title"><i class="bi bi-receipt"></i> Orçamentos</h4>
+        <h4 class="page-title"><i class="fa-solid fa-receipt"></i> Orçamentos</h4>
         @if(Auth::user()->isPrestador() || Auth::user()->isAdm())
         <a href="{{ route('orcamentos.create') }}" class="btn-dash-fill">
                 <i class="fa-solid fa-circle-plus"></i> Novo Orçamento
@@ -251,14 +250,14 @@
 
                 <div class="orc-meta">
                     <div class="orc-meta-item">
-                        <i class="bi bi-person-gear"></i>
+                        <i class="fa-solid fa-person-gear"></i>
                         <div class="prestador-row">
                             <div class="p-avatar">{{ strtoupper(substr($orc->usuario->nome, 0, 1)) }}</div>
                             <strong>{{ Str::limit($orc->usuario->nome, 20) }}</strong>
                         </div>
                     </div>
                     <div class="orc-meta-item">
-                        <i class="bi bi-tools"></i>
+                        <i class="fa-solid fa-tools"></i>
                         <span>M.O.: <strong>R$ {{ number_format($orc->mao_de_obra, 2, ',', '.') }}</strong></span>
                     </div>
                 </div>
@@ -269,7 +268,7 @@
                         R$ {{ number_format($orc->valor_total, 2, ',', '.') }}
                     </div>
                     <div class="orc-prazo">
-                        <i class="bi bi-clock"></i>
+                        <i class="fa-solid fa-clock"></i>
                         {{ $orc->prazo }} dias
                     </div>
                 </div>
@@ -277,13 +276,13 @@
             </div>
 
             <div class="orc-footer">
-                <a href="{{ route('orcamentos.show', $orc) }}" class="act-btn act-view" title="Ver"><i class="bi bi-eye"></i></a>
+                <a href="{{ route('orcamentos.show', $orc) }}" class="act-btn act-view" title="Ver"><i class="fa-solid fa-eye"></i></a>
 
                 @if(Auth::user()->isAdm() || $orc->usuario_id === Auth::id())
-                    <a href="{{ route('orcamentos.edit', $orc) }}" class="act-btn act-edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                    <a href="{{ route('orcamentos.edit', $orc) }}" class="act-btn act-edit" title="Editar"><i class="fa-solid fa-pencil"></i></a>
                     <form action="{{ route('orcamentos.destroy', $orc) }}" method="POST" class="d-inline" onsubmit="return confirm('Excluir este orçamento?')">
                         @csrf @method('DELETE')
-                        <button type="submit" class="act-btn act-delete" title="Excluir"><i class="bi bi-trash"></i></button>
+                        <button type="submit" class="act-btn act-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
                     </form>
                 @endif
 
@@ -291,11 +290,11 @@
                 @if(Auth::user()->isCliente() && $orc->status === 'pendente' && $orc->solicitacao->usuario_id === Auth::id())
                     <form action="{{ route('orcamentos.aceitar', $orc) }}" method="POST" class="d-inline ms-auto">
                         @csrf
-                        <button type="submit" class="act-btn act-accept" title="Aceitar orçamento"><i class="bi bi-check-lg"></i></button>
+                        <button type="submit" class="act-btn act-accept" title="Aceitar orçamento"><i class="fa-solid fa-check"></i></button>
                     </form>
                     <form action="{{ route('orcamentos.recusar', $orc) }}" method="POST" class="d-inline" onsubmit="return confirm('Recusar este orçamento?')">
                         @csrf
-                        <button type="submit" class="act-btn act-reject" title="Recusar orçamento"><i class="bi bi-x-lg"></i></button>
+                        <button type="submit" class="act-btn act-reject" title="Recusar orçamento"><i class="fa-solid fa-times"></i></button>
                     </form>
                 @endif
             </div>

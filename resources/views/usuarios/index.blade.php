@@ -113,12 +113,12 @@
         border: 1.5px solid; text-decoration: none; background: transparent;
         flex-shrink: 0;
     }
-    .act-view   { border-color: #bde0ff; color: #0d6efd; }
-    .act-view:hover   { background: #ebf2ff; color: #0d6efd; }
-    .act-edit   { border-color: #fde9a2; color: #b07d00; }
-    .act-edit:hover   { background: #fdf6e3; color: #b07d00; }
-    .act-delete { border-color: #ffc9b8; color: #c73200; }
-    .act-delete:hover { background: #fff1ec; color: #c73200; }
+    .act-view   { border:none; color: #ffffff;background: #fa4101; }
+    .act-view:hover   { background: #c93200;  }
+    .act-edit   { border:none; color: #ffffff;background: #fa4101; }
+    .act-edit:hover   { background: #c93200;  }
+    .act-delete { border:none; color: #ffffff;background: #da0101; }
+    .act-delete:hover { background: #b80000;  }
 
     .empty-state { padding: 52px 20px; text-align: center; }
     .empty-state i { font-size: 40px; color: #e0e0e0; display: block; margin-bottom: 12px; }
@@ -150,9 +150,9 @@
 <div class="dash">
 
     <div class="page-header">
-        <h4 class="page-title"><i class="bi bi-people"></i> Usuários</h4>
+        <h4 class="page-title"><i class="fa fa-users"></i> Usuários</h4>
         <a href="{{ route('usuarios.create') }}" class="btn-dash-fill">
-            <i class="bi bi-plus-lg"></i> Novo Usuário
+            <i class="fa fa-circle-plus"></i> Novo Usuário
         </a>
     </div>
 
@@ -214,11 +214,11 @@
 
                         <td>
                             <div class="actions">
-                                <a href="{{ route('usuarios.show', $usuario) }}" class="act-btn act-view" title="Ver"><i class="bi bi-eye"></i></a>
-                                <a href="{{ route('usuarios.edit', $usuario) }}" class="act-btn act-edit" title="Editar"><i class="bi bi-pencil"></i></a>
+                                <a href="{{ route('usuarios.show', $usuario) }}" class="act-btn act-view" title="Ver"><i class="fa-solid fa-eye"></i></a>
+                                <a href="{{ route('usuarios.edit', $usuario) }}" class="act-btn act-edit" title="Editar"><i class="fa-solid fa-edit"></i></a>
                                 <form action="{{ route('usuarios.destroy', $usuario) }}" method="POST" class="d-inline" onsubmit="return confirm('Deletar este usuário?')">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="act-btn act-delete" title="Deletar"><i class="bi bi-trash"></i></button>
+                                    <button type="submit" class="act-btn act-delete" title="Deletar"><i class="fa-solid fa-trash"></i></button>
                                 </form>
                             </div>
                         </td>
