@@ -52,7 +52,7 @@
             <select name="status" id="status" class="form-control @error('status') is-invalid @enderror" required>
                 <option value="">Selecione um status</option>
                 <option value="pendente" {{ (isset($orcamento) && $orcamento->status == 'pendente') || old('status') == 'pendente' ? 'selected' : '' }}>Pendente</option>
-                <option value="aprovado" {{ (isset($orcamento) && $orcamento->status == 'aprovado') || old('status') == 'aprovado' ? 'selected' : '' }}>Aprovado</option>
+                <option value="aceito" {{ (isset($orcamento) && $orcamento->status == 'aceito') || old('status') == 'aceito' ? 'selected' : '' }}>Aceito</option>
                 <option value="recusado" {{ (isset($orcamento) && $orcamento->status == 'recusado') || old('status') == 'recusado' ? 'selected' : '' }}>Recusado</option>
             </select>
             @error('status') <small class="text-danger">{{ $message }}</small> @enderror

@@ -280,7 +280,7 @@
 
             <div class="ag-footer">
 
-                {{-- PRESTADOR: aceitar / recusar pendentes --}}
+                {{-- PRESTADOR: aceitar / recusar pendentes / concluir confirmados --}}
                 @if(Auth::user()->isPrestador())
                     @if($ag->status === 'pendente')
                         <form action="{{ route('agendamentos.aceitar', $ag) }}" method="POST" class="d-inline"
@@ -294,27 +294,26 @@
                             <button type="submit" class="act-btn act-reject" title="Recusar"><i class="bi bi-x-lg"></i></button>
                         </form>
                     @endif
-                    <a href="{{ route('agendamentos.show', $ag) }}" class="act-btn act-view" title="Ver"><i class="bi bi-eye"></i></a>
-                @endif
-
-                {{-- CLIENTE: concluir / avaliar / editar / excluir --}}
-                @if(Auth::user()->isCliente())
                     @if($ag->status === 'confirmado')
                         <form action="{{ route('agendamentos.concluir', $ag) }}" method="POST" class="d-inline"
-                            onsubmit="return confirm('Confirma que o serviço já ocorreu?');">
+                            onsubmit="return confirm('Confirma que o serviço foi concluído?');">
                             @csrf
                             <button type="submit" class="act-btn act-done" title="Marcar como concluído"><i class="bi bi-check2-all"></i></button>
                         </form>
                     @endif
+                    <a href="{{ route('agendamentos.show', $ag) }}" class="act-btn act-view" title="Ver"><i class="bi bi-eye"></i></a>
+                @endif
 
+                {{-- CLIENTE: avaliar / editar / excluir --}}
+                @if(Auth::user()->isCliente())
                     @if($ag->status === 'concluido')
                         @php
-                            $jaAvaliou = \App\Models\Avaliacao::where('servico_id', $ag->servico_id)
+                            $jaAvaliou = \App\Models\Avaliacao::where('agendamento_id', $ag->id)
                                             ->where('usuario_id', Auth::id())
                                             ->exists();
                         @endphp
                         @unless($jaAvaliou)
-                        <a href="{{ route('avaliacoes.create', ['servico_id' => $ag->servico_id]) }}"
+                        <a href="{{ route('avaliacoes.create', ['agendamento_id' => $ag->id]) }}"
                             class="act-btn act-star" title="Avaliar serviço">
                             <i class="bi bi-star"></i>
                         </a>

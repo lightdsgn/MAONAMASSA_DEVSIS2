@@ -7,7 +7,7 @@
 <div class="card p-4">
     <form action="{{ route('solicitacoes.update', $solicitacao) }}" method="POST" enctype="multipart/form-data">
         @csrf @method('PUT')
-        @include('solicitacoes._form', ['solicitacao' => $solicitacao])
+        @include('solicitacoes.form', ['solicitacao' => $solicitacao])
         <div class="mt-4">
             <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
         </div>

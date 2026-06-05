@@ -9,7 +9,7 @@ class Solicitacao extends Model
     protected $table = 'solicitacoes';
 
     protected $fillable = [
-        'usuario_id', 'titulo', 'descricao',
+        'usuario_id', 'prestador_id', 'titulo', 'descricao',
         'categoria', 'foto', 'status', 'disponibilidade',
     ];
 
@@ -26,5 +26,5 @@ class Solicitacao extends Model
     public function prestador()
     {
         return $this->belongsTo(Usuario::class, 'prestador_id');
-    }       
+    }
 }

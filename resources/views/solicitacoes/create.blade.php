@@ -7,7 +7,7 @@
 <div class="card p-4">
     <form action="{{ route('solicitacoes.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        @include('solicitacoes._form', ['solicitacao' => null])
+        @include('solicitacoes.form', ['solicitacao' => null])
         <div class="mt-4">
             <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-lg me-1"></i>Enviar</button>
         </div>

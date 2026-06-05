@@ -25,8 +25,58 @@
         <div class="col-12"><strong>Observações:</strong><p class="text-muted mt-1">{{ $agendamento->observacoes }}</p></div>
         @endif
     </div>
-    <div class="mt-4">
-        <a href="{{ route('agendamentos.edit', $agendamento) }}" class="btn btn-outline-warning"><i class="bi bi-pencil me-1"></i>Editar</a>
+
+    <div class="mt-4 d-flex gap-2 flex-wrap">
+
+        {{-- PRESTADOR --}}
+        @if(Auth::user()->isPrestador() && $agendamento->servico->usuario_id === Auth::id())
+            @if($agendamento->status === 'pendente')
+                <form action="{{ route('agendamentos.aceitar', $agendamento) }}" method="POST" class="d-inline"
+                    onsubmit="return confirm('Deseja confirmar este agendamento?');">
+                    @csrf
+                    <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-check-lg me-1"></i>Aceitar</button>
+                </form>
+                <form action="{{ route('agendamentos.recusar', $agendamento) }}" method="POST" class="d-inline"
+                    onsubmit="return confirm('Deseja recusar este agendamento?');">
+                    @csrf
+                    <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-x-lg me-1"></i>Recusar</button>
+                </form>
+            @endif
+            @if($agendamento->status === 'confirmado')
+                <form action="{{ route('agendamentos.concluir', $agendamento) }}" method="POST" class="d-inline"
+                    onsubmit="return confirm('Confirma que o serviço foi concluído?');">
+                    @csrf
+                    <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-check2-all me-1"></i>Marcar como Concluído</button>
+                </form>
+            @endif
+        @endif
+
+        {{-- CLIENTE --}}
+        @if(Auth::user()->isCliente() && $agendamento->cliente_id === Auth::id())
+            @if($agendamento->status === 'concluido')
+                @php
+                    $jaAvaliou = \App\Models\Avaliacao::where('agendamento_id', $agendamento->id)
+                                    ->where('usuario_id', Auth::id())
+                                    ->exists();
+                @endphp
+                @unless($jaAvaliou)
+                <a href="{{ route('avaliacoes.create', ['agendamento_id' => $agendamento->id]) }}" class="btn btn-warning btn-sm">
+                    <i class="bi bi-star me-1"></i>Avaliar Serviço
+                </a>
+                @endunless
+            @endif
+            <a href="{{ route('agendamentos.edit', $agendamento) }}" class="btn btn-outline-warning btn-sm">
+                <i class="bi bi-pencil me-1"></i>Editar
+            </a>
+        @endif
+
+        {{-- ADM --}}
+        @if(Auth::user()->isAdm())
+            <a href="{{ route('agendamentos.edit', $agendamento) }}" class="btn btn-outline-warning btn-sm">
+                <i class="bi bi-pencil me-1"></i>Editar
+            </a>
+        @endif
+
     </div>
 </div>
 @endsection

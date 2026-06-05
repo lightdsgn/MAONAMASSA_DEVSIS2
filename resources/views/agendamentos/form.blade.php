@@ -5,6 +5,9 @@
 
 <div class="row g-3">
     @if (! $isEdit)
+    @if($orcamento_id ?? null)
+        <input type="hidden" name="orcamento_id" value="{{ $orcamento_id }}">
+    @endif
     <div class="col-12">
         <label class="form-label fw-semibold">Serviço *</label>
         <select name="servico_id" class="form-select @error('servico_id') is-invalid @enderror" required>

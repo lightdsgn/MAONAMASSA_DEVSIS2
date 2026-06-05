@@ -7,7 +7,7 @@
 <div class="card p-4">
     <form action="{{ route('agendamentos.store') }}" method="POST">
         @csrf
-        @include('agendamentos._form', ['servicos' => $servicos, 'servico_id' => $servico_id])
+        @include('agendamentos.form', ['servicos' => $servicos, 'servico_id' => $servico_id])
         <div class="mt-4">
             <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-lg me-1"></i>Confirmar Agendamento</button>
         </div>

@@ -39,7 +39,15 @@ class OrcamentoController extends Controller
     public function create()
     {
         $this->checkPrestador();
-        $solicitacoes = Solicitacao::whereDoesntHave('orcamentos')->get();
+
+        $solicitacoes = Solicitacao::whereDoesntHave('orcamentos')
+            ->where('prestador_id', Auth::id())
+            ->get();
+        
+        $servicos = \App\Models\Servico::where('usuario_id', Auth::id())
+            ->where('status', 'ativo')
+            ->get();
+
         return view('orcamentos.create', compact('solicitacoes'));
     }
 

@@ -52,7 +52,7 @@
             <select name="status" id="status" class="form-control @error('status') is-invalid @enderror" required>
                 <option value="">Selecione um status</option>
                 <option value="pendente" {{ old('status') == 'pendente' ? 'selected' : '' }}>Pendente</option>
-                <option value="aprovado" {{ old('status') == 'aprovado' ? 'selected' : '' }}>Aprovado</option>
+                <option value="aceito"   {{ old('status') == 'aceito'   ? 'selected' : '' }}>Aceito</option>
                 <option value="recusado" {{ old('status') == 'recusado' ? 'selected' : '' }}>Recusado</option>
             </select>
             @error('status') <small class="text-danger">{{ $message }}</small> @enderror

@@ -7,7 +7,7 @@
 <div class="card p-4">
     <form action="{{ route('agendamentos.update', $agendamento) }}" method="POST">
         @csrf @method('PUT')
-        @include('agendamentos._form', ['agendamento' => $agendamento, 'servicos' => $servicos ?? [], 'servico_id' => $servico_id ?? null])
+        @include('agendamentos.form', ['agendamento' => $agendamento, 'servicos' => $servicos ?? [], 'servico_id' => $servico_id ?? null])
         <div class="mt-4">
             <button type="submit" class="btn btn-primary px-4"><i class="bi bi-check-lg me-1"></i>Atualizar</button>
         </div>

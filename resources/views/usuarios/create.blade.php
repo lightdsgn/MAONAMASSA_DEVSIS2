@@ -11,7 +11,7 @@
 <div class="card p-4">
     <form action="{{ route('usuarios.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        @include('usuarios._form', ['usuario' => null])
+        @include('usuarios.form', ['usuario' => null])
         <div class="mt-4">
             <button type="submit" class="btn btn-primary px-4">
                 <i class="bi bi-check-lg me-1"></i> Salvar

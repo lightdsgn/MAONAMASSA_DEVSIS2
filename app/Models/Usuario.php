@@ -32,6 +32,26 @@ class Usuario extends Authenticatable
     public function isCliente(): bool  { return $this->tipo === 'cliente'; }
 
     // ---------- relacionamentos ----------
+    public function agendamentosComoPrestador()
+    {
+        return $this->hasManyThrough(
+            \App\Models\Agendamento::class,
+            \App\Models\Servico::class,
+            'usuario_id',   // FK em servicos
+            'servico_id',   // FK em agendamentos
+        );
+    }
+
+    public function pagamentos()
+    {
+        return $this->hasManyThrough(
+            \App\Models\Pagamento::class,
+            \App\Models\Agendamento::class,
+            'cliente_id',      // FK em agendamentos
+            'agendamento_id',  // FK em pagamentos
+        );
+    }
+
     public function servicos()
     {
         return $this->hasMany(Servico::class);

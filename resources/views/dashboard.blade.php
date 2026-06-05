@@ -224,7 +224,7 @@
             $total      = $adms + $prestadores + $clientes ?: 1;
             $pagos      = \App\Models\Pagamento::where('status','pago')->count();
             $pendentes  = \App\Models\Pagamento::where('status','pendente')->count();
-            $avaliacoes = \App\Models\Avaliacao::with('prestador')->orderByDesc('nota')->latest()->take(4)->get();
+            $avaliacoes = \App\Models\Avaliacao::with('servico.usuario')->orderByDesc('nota')->latest()->take(4)->get();
         @endphp
 
         <div class="stat-grid">
@@ -281,7 +281,7 @@
                 @forelse($avaliacoes as $av)
                 <div class="activity-item">
                     <div class="activity-icon blue"><i class="bi bi-star-fill"></i></div>
-                    <div><div class="activity-title">{{ $av->prestador->nome ?? 'Prestador' }}</div>
+                    <div><div class="activity-title">{{ $av->servico->usuario->nome ?? 'Prestador' }}</div>
                     <div class="activity-sub" style="color:#ffc107;">{{ str_repeat('★',$av->nota) }} <span style="color:#666;">{{ $av->nota }}.0</span></div></div>
                 </div>
                 @empty<div class="dash-empty">Nenhuma avaliação.</div>@endforelse
@@ -292,7 +292,7 @@
         @php
             $totalServs     = Auth::user()->servicos()->count();
             $solsAbertas    = \App\Models\Solicitacao::where('status','aberta')->count();
-            $mediaAval      = \App\Models\Avaliacao::whereHas('prestador', fn($q) => $q->where('id',Auth::id()))->avg('nota');
+            $mediaAval = \App\Models\Avaliacao::whereHas('servico', fn($q) => $q->where('usuario_id', Auth::id()))->avg('nota');
         @endphp
 
         <div class="stat-grid">
@@ -307,7 +307,7 @@
                 @forelse(Auth::user()->servicos()->latest()->take(4)->get() as $sv)
                 <div class="dash-row">
                     <span class="row-title">{{ Str::limit($sv->titulo,28) }}</span>
-                    <span class="tag tag-blue">R$ {{ number_format($sv->preco,2,',','.') }}</span>
+                    <span class="tag tag-blue">R$ {{ number_format($sv->preco_estimado ?? 0, 2, ',', '.') }}</span>
                 </div>
                 @empty<div class="dash-empty">Nenhum serviço cadastrado.</div>@endforelse
                 <div class="dash-card-footer"><a href="{{ route('servicos.create') }}" class="btn-dash-fill"><i class="bi bi-plus-lg"></i> Novo Serviço</a></div>
@@ -385,7 +385,7 @@
                 <div class="activity-item">
                     <div class="activity-icon blue"><i class="bi bi-tools"></i></div>
                     <div><div class="activity-title">{{ Str::limit($sv->titulo,30) }}</div>
-                    <div class="activity-sub" style="color:#fa4101;font-weight:600;">R$ {{ number_format($sv->preco,2,',','.') }}</div></div>
+                    <div class="activity-sub" style="color:#fa4101;font-weight:600;">R$ {{ number_format($sv->preco_estimado ?? 0, 2, ',', '.') }}</div></div>
                 </div>
                 @empty<div class="dash-empty">Nenhum serviço disponível.</div>@endforelse
             </div>
