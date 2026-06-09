@@ -21,7 +21,7 @@ class SolicitacaoController extends Controller
         $busca = $request->busca;
         $user  = Auth::user();
 
-        $query = Solicitacao::with('usuario');
+        $query = Solicitacao::with('usuario', 'orcamento');
 
         // Prestador só vê solicitações abertas e ainda sem orçamento
         if ($user->isPrestador()) {
@@ -35,9 +35,11 @@ class SolicitacaoController extends Controller
         }
 
         $query->when($busca, function ($q) use ($busca) {
-            $q->where('titulo', 'like', "%$busca%")
-              ->orWhere('categoria', 'like', "%$busca%")
-              ->orWhere('status', 'like', "%$busca%");
+            $q->where(function ($inner) use ($busca) {
+                $inner->where('titulo', 'like', "%$busca%")
+                      ->orWhere('categoria', 'like', "%$busca%")
+                      ->orWhere('status', 'like', "%$busca%");
+            });
         });
 
         $solicitacoes = $query->latest()->paginate(10);
@@ -75,6 +77,7 @@ class SolicitacaoController extends Controller
 
     public function show(Solicitacao $solicitacao)
     {
+        $solicitacao->load('usuario', 'prestador', 'orcamento', 'orcamento.usuario', 'orcamento.servico');
         return view('solicitacoes.show', compact('solicitacao'));
     }
 

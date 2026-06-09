@@ -15,15 +15,53 @@
     }
     .page-title i { color: #fa4101; font-size: 1.2rem; }
 
-    .btn-dash-fill {
-        background: #fa4101; color: #fff; border: none;
-        border-radius: 9px; padding: 9px 18px;
-        font-size: 0.82rem; font-weight: 700;
-        text-decoration: none; display: inline-flex; align-items: center; gap: 7px;
-        transition: background 0.2s; font-family: 'Sora', sans-serif; cursor: pointer;
+    /* ── Seção ───────────────────────────── */
+    .section-title {
+        font-size: 1rem; font-weight: 800; color: #111;
+        letter-spacing: -0.3px; margin: 0 0 16px 0;
+        display: flex; align-items: center; gap: 8px;
     }
-    .btn-dash-fill:hover { background: #c73200; color: #fff; }
+    .section-title i { color: #fa4101; font-size: 0.95rem; }
+    .section-divider { border: none; border-top: 1.5px solid #ececec; margin: 32px 0; }
 
+    /* ── Cards pendentes ─────────────────── */
+    .pendentes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: 18px;
+        margin-bottom: 8px;
+    }
+
+    .pend-card {
+        background: #fff;
+        border-radius: 14px;
+        border: 1.5px solid #ececec;
+        padding: 18px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        animation: fadeUp 0.35s ease both;
+    }
+    .pend-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.08); }
+
+    .pend-servico { font-size: 0.95rem; font-weight: 800; color: #111; letter-spacing: -0.2px; }
+    .pend-meta { display: flex; flex-direction: column; gap: 4px; }
+    .pend-meta-item { display: flex; align-items: center; gap: 6px; font-size: 0.77rem; color: #999; }
+    .pend-meta-item i { font-size: 12px; color: #ccc; }
+    .pend-meta-item strong { color: #555; font-weight: 600; }
+
+    .btn-avaliar {
+        background: #fa4101; color: #fff; border: none;
+        border-radius: 9px; padding: 8px 16px;
+        font-size: 0.8rem; font-weight: 700;
+        text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+        transition: background 0.2s; font-family: 'Sora', sans-serif; cursor: pointer;
+        align-self: flex-start; margin-top: 2px;
+    }
+    .btn-avaliar:hover { background: #c73200; color: #fff; }
+
+    /* ── Cards de avaliações já feitas ──── */
     .avaliacoes-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
@@ -46,7 +84,6 @@
         box-shadow: 0 12px 32px rgba(0,0,0,0.09);
     }
 
-    /* barra colorida no topo pela nota */
     .av-banner { height: 8px; flex-shrink: 0; }
     .nota-5 { background: linear-gradient(90deg, #f9a825, #fa4101); }
     .nota-4 { background: #ffc107; }
@@ -63,7 +100,6 @@
     }
     .av-servico { font-size: 0.95rem; font-weight: 800; color: #111; line-height: 1.3; letter-spacing: -0.2px; }
 
-    /* estrelas */
     .stars { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
     .stars i { font-size: 13px; }
     .star-fill  { color: #f9a825; }
@@ -99,7 +135,6 @@
         display: flex; align-items: center; gap: 7px;
     }
 
-  
     .autor-badge {
         display: flex; align-items: center; gap: 6px;
         font-size: 0.75rem; font-weight: 700; color: #888;
@@ -120,12 +155,8 @@
         border: 1.5px solid; text-decoration: none; background: transparent;
         flex-shrink: 0;
     }
-        .act-view   { border:none; color: #ffffff;background: #fa4101; }
-    .act-view:hover   { background: #c93200;  }
-    .act-edit   { border:none; color: #ffffff;background: #fa4101; }
-    .act-edit:hover   { background: #c93200;  }
     .act-delete { border:none; color: #ffffff;background: #da0101; }
-    .act-delete:hover { background: #b80000;  }
+    .act-delete:hover { background: #b80000; }
 
     .empty-state {
         grid-column: 1 / -1; padding: 60px 20px; text-align: center;
@@ -133,17 +164,6 @@
     }
     .empty-state i { font-size: 44px; color: #e0e0e0; display: block; margin-bottom: 12px; }
     .empty-state p { font-size: 0.9rem; color: #bbb; margin: 0; font-weight: 500; }
-
-    .pagination-wrap { margin-top: 4px; }
-    .pagination-wrap .pagination { gap: 4px; }
-    .pagination-wrap .page-link {
-        border-radius: 8px !important; border: 1.5px solid #ececec;
-        color: #666; font-size: 0.8rem; font-weight: 600;
-        font-family: 'Sora', sans-serif; padding: 6px 12px; transition: all 0.2s;
-    }
-    .pagination-wrap .page-link:hover { border-color: #fa4101; color: #fa4101; background: #fff8f5; }
-    .pagination-wrap .page-item.active .page-link { background: #fa4101; border-color: #fa4101; color: #fff; }
-    .pagination-wrap .page-item.disabled .page-link { opacity: 0.4; }
 
     @keyframes fadeUp {
         from { opacity:0; transform:translateY(16px); }
@@ -154,7 +174,7 @@
 
     @media(max-width:576px) {
         .dash { padding: 16px; }
-        .avaliacoes-grid { grid-template-columns: 1fr; }
+        .avaliacoes-grid, .pendentes-grid { grid-template-columns: 1fr; }
     }
 </style>
 
@@ -162,12 +182,66 @@
 
     <div class="page-header">
         <h4 class="page-title"><i class="fa-solid fa-star"></i> Avaliações</h4>
-        @if(Auth::user()->isCliente())
-        <a href="{{ route('avaliacoes.create') }}" class="btn-dash-fill">
-            <i class="fa-solid fa-circle-plus"></i> Nova Avaliação
-        </a>
-        @endif
     </div>
+
+    @if(session('sucesso'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i>{{ session('sucesso') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(Auth::user()->isCliente() && isset($agendamentosPendentes))
+    <h5 class="section-title">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Serviços pendentes de avaliação
+        @if($agendamentosPendentes->count())
+            <span style="background:#fa4101;color:#fff;border-radius:20px;padding:1px 9px;font-size:0.72rem;">
+                {{ $agendamentosPendentes->count() }}
+            </span>
+        @endif
+    </h5>
+
+    <div class="pendentes-grid">
+        @forelse($agendamentosPendentes as $i => $ag)
+        <div class="pend-card d{{ ($i % 6) + 1 }}">
+            <div class="pend-servico">{{ $ag->servico->titulo }}</div>
+
+            <div class="pend-meta">
+                <div class="pend-meta-item">
+                    <i class="fa-solid fa-person-gear"></i>
+                    <span>Prestador: <strong>{{ $ag->servico->usuario->nome }}</strong></span>
+                </div>
+                <div class="pend-meta-item">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Concluído em: <strong>{{ $ag->updated_at?->format('d/m/Y') ?? '—' }}</strong></span>
+                </div>
+            </div>
+
+            <a href="{{ route('avaliacoes.create', ['agendamento_id' => $ag->id]) }}" class="btn-avaliar">
+                <i class="fa-solid fa-star-half-stroke"></i> Avaliar
+            </a>
+        </div>
+        @empty
+        <div class="empty-state">
+            <i class="fa-regular fa-circle-check"></i>
+            <p>Nenhum serviço aguardando avaliação.</p>
+        </div>
+        @endforelse
+    </div>
+
+    <hr class="section-divider">
+    @endif
+
+    
+    <h5 class="section-title">
+        <i class="fa-solid fa-star"></i>
+        @if(Auth::user()->isPrestador())
+            Avaliações dos meus serviços
+        @else
+            Minhas avaliações
+        @endif
+    </h5>
 
     <div class="avaliacoes-grid">
         @forelse($avaliacoes as $i => $av)
@@ -182,7 +256,8 @@
                     <div style="display:flex;align-items:center;gap:4px;">
                         <div class="stars">
                             @for($s = 1; $s <= 5; $s++)
-                                <i class="fa-solid fa-star{{ $s <= $av->nota ? '-fill star-fill' : ' star-empty' }}"></i>
+                                <i class="{{ $s <= $av->nota ? 'fa-solid' : 'fa-regular' }} fa-star"
+                                   style="color: {{ $s <= $av->nota ? '#f9a825' : '#ddd' }}"></i>
                             @endfor
                         </div>
                         <span class="nota-num">{{ $av->nota }}/5</span>
@@ -194,9 +269,15 @@
                         <i class="fa-solid fa-person-gear"></i>
                         <span>Prestador: <strong>{{ $av->servico->usuario->nome }}</strong></span>
                     </div>
+                    @if(Auth::user()->isPrestador() || Auth::user()->isAdm())
                     <div class="av-meta-item">
                         <i class="fa-solid fa-person-check"></i>
-                        <span>Avaliado por: <strong>{{ $av->usuario->nome }}</strong></span>
+                        <span>Cliente: <strong>{{ $av->usuario->nome }}</strong></span>
+                    </div>
+                    @endif
+                    <div class="av-meta-item">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>Data: <strong>{{ $av->created_at->format('d/m/Y') }}</strong></span>
                     </div>
                 </div>
 
@@ -213,7 +294,9 @@
                 <form action="{{ route('avaliacoes.destroy', $av) }}" method="POST" class="d-inline"
                     onsubmit="return confirm('Remover avaliação?')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="act-btn act-delete" title="Excluir"><i class="fa-solid fa-trash"></i></button>
+                    <button type="submit" class="act-btn act-delete" title="Excluir">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </form>
                 @endif
 
@@ -231,12 +314,6 @@
         </div>
         @endforelse
     </div>
-
-    @if($avaliacoes->hasPages())
-    <div class="pagination-wrap">
-        {{ $avaliacoes->links() }}
-    </div>
-    @endif
 
 </div>
 @endsection

@@ -12,24 +12,32 @@ class AvaliacaoController extends Controller
 {
     public function index(Request $request)
     {
-        $busca = $request->busca;
-        $user  = Auth::user();
+        $user = Auth::user();
 
-        $query = Avaliacao::with(['servico.usuario', 'usuario', 'agendamento']);
+        // --- Minhas avaliações já realizadas ---
+        $avaliacoesQuery = Avaliacao::with(['servico.usuario', 'usuario', 'agendamento']);
 
         if ($user->isPrestador()) {
-            $query->whereHas('servico', fn($q) => $q->where('usuario_id', $user->id));
+            $avaliacoesQuery->whereHas('servico', fn($q) => $q->where('usuario_id', $user->id));
         } elseif ($user->isCliente()) {
-            $query->where('usuario_id', $user->id);
+            $avaliacoesQuery->where('usuario_id', $user->id);
         }
 
-        if ($busca) {
-            $query->whereHas('servico', fn($q) => $q->where('titulo', 'like', "%$busca%"));
+        $avaliacoes = $avaliacoesQuery->orderByDesc('created_at')->get();
+
+        // --- Agendamentos pendentes de avaliação (apenas para clientes) ---
+        $agendamentosPendentes = collect();
+
+        if ($user->isCliente()) {
+            $agendamentosPendentes = Agendamento::with('servico.usuario')
+                ->where('cliente_id', $user->id)
+                ->where('status', 'concluido')
+                ->whereDoesntHave('avaliacoes')
+                ->orderByDesc('updated_at')
+                ->get();
         }
 
-        $avaliacoes = $query->orderByDesc('created_at')->paginate(10);
-
-        return view('avaliacoes.index', compact('avaliacoes', 'busca'));
+        return view('avaliacoes.index', compact('avaliacoes', 'agendamentosPendentes'));
     }
 
     public function create(Request $request)
@@ -40,13 +48,18 @@ class AvaliacaoController extends Controller
 
         $agendamento_id = $request->agendamento_id;
 
-        $agendamentos = Agendamento::with('servico')
+        if (!$agendamento_id) {
+            return redirect()->route('avaliacoes.index')
+                ->withErrors(['agendamento_id' => 'Selecione um agendamento para avaliar.']);
+        }
+
+        $agendamento = Agendamento::with('servico.usuario')
             ->where('cliente_id', Auth::id())
             ->where('status', 'concluido')
             ->whereDoesntHave('avaliacoes')
-            ->get();
+            ->findOrFail($agendamento_id);
 
-        return view('avaliacoes.create', compact('agendamentos', 'agendamento_id'));
+        return view('avaliacoes.create', compact('agendamento'));
     }
 
     public function store(Request $request)
@@ -91,7 +104,7 @@ class AvaliacaoController extends Controller
             'comentario'     => $request->comentario,
         ]);
 
-        return redirect()->route('avaliacoes.index')->with('sucesso', 'Avaliação registrada!');
+        return redirect()->route('avaliacoes.index')->with('sucesso', 'Avaliação registrada com sucesso!');
     }
 
     public function show(Avaliacao $avaliacao)

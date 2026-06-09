@@ -142,7 +142,7 @@ class UsuarioController extends Controller
             'estado'     => 'nullable|string|max:2',
         ]);
 
-        $data = $request->except(['foto']);
+        $data = $request->except(['foto', '_token', '_method']);
 
         if ($request->hasFile('foto')) {
             if ($usuario->foto) {

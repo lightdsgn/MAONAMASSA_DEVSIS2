@@ -74,8 +74,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/agendamentos/{agendamento}/recusar', [AgendamentoController::class, 'recusar'])->name('agendamentos.recusar');
     Route::post('/agendamentos/{agendamento}/concluir', [AgendamentoController::class, 'concluir'])->name('agendamentos.concluir');
 
-    // Avaliações
-    Route::resource('avaliacoes', AvaliacaoController::class)->except(['edit', 'update']);
+    // Avaliações — create exige agendamento_id, sem edição (imutável após criação)
+    Route::resource('avaliacoes', AvaliacaoController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
 
     // Pagamentos
     Route::resource('pagamentos', PagamentoController::class);

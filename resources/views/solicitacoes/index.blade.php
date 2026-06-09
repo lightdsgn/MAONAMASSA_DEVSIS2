@@ -229,7 +229,7 @@
 
                 <div class="solic-bottom">
                     <div class="data-badge">
-                        <i class="fa-solid fa-calendar3"></i>
+                        <i class="fa-solid fa-calendar-days"></i>
                         {{ $s->disponibilidade ? \Carbon\Carbon::parse($s->disponibilidade)->format('d/m/Y') : 'Sem data' }}
                     </div>
                     @if($s->orcamento)
@@ -238,7 +238,7 @@
                         </div>
                     @else
                         <div class="orcamento-badge orcamento-nao">
-                            <i class="fa-solid fa-dash-circle" style="font-size:12px;"></i> Sem orçamento
+                            <i class="fa-solid fa-circle-minus" style="font-size:12px;"></i> Sem orçamento
                         </div>
                     @endif
                 </div>
