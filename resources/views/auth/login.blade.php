@@ -68,8 +68,9 @@
         font-size: 14px;
     }
 
+    /* ✅ Usando classe em vez de [type="password"] para não quebrar ao trocar o tipo */
     .field input[type="email"],
-    .field input[type="password"] {
+    .field .password-input {
         width: 100%;
         padding: 11px 14px;
         font-size: 0.92rem;
@@ -82,15 +83,17 @@
         transition: border-color 0.2s, box-shadow 0.2s;
         box-shadow: none;
         -webkit-appearance: none;
+        box-sizing: border-box;
+        padding-right: 42px;
     }
 
     .field input[type="email"]:hover,
-    .field input[type="password"]:hover {
+    .field .password-input:hover {
         border-color: #fa4101;
     }
 
     .field input[type="email"]:focus,
-    .field input[type="password"]:focus {
+    .field .password-input:focus {
         border-color: #fa4101;
         border-width: 2px;
         box-shadow: 0 0 0 3px rgba(250,65,1,0.15);
@@ -200,19 +203,47 @@
     .login-footer a:hover {
         text-decoration: underline;
     }
-        .titulo{
+
+    .titulo {
         font-size: 25px;
         color: #ffffff;
         font-family: Sora;
         font-weight: 900;
-        margin-bottom: -5px;
-        margin-top: 40px;
         background: linear-gradient(90deg, #fa4101, #f97316);
         padding: 10px 20px;
         max-width: 100%;
         border-radius: 15px;
         margin: auto;
+    }
 
+    /* Olho da senha */
+    .input-eye-wrap {
+        position: relative;
+        display: block;
+    }
+
+    .toggle-eye {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #aaa;
+        padding: 0;
+        font-size: 15px;
+        line-height: 1;
+        transition: color 0.2s;
+        outline: none;
+    }
+
+    .toggle-eye:hover {
+        color: #fa4101;
+    }
+
+    .toggle-eye:focus {
+        outline: none;
     }
 </style>
 
@@ -245,9 +276,16 @@
                 <label for="password">
                     <i class="fas fa-lock"></i> Senha
                 </label>
-                <input type="password" id="password" name="password"
-                    placeholder="••••••••"
-                    required>
+                <div class="input-eye-wrap">
+                    {{-- ✅ Classe "password-input" garante estilo fixo independente do type --}}
+                    <input type="password" id="password" name="password"
+                        class="password-input"
+                        placeholder="••••••••"
+                        required>
+                    <button type="button" class="toggle-eye" onclick="toggleSenha()">
+                        <i class="fas fa-eye" id="eyeIcon"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="check-row">
@@ -266,5 +304,17 @@
 
     </div>
 </div>
+
+<script>
+    function toggleSenha() {
+        const input = document.getElementById('password');
+        const icon  = document.getElementById('eyeIcon');
+        const visivel = input.type === 'text';
+
+        input.type = visivel ? 'password' : 'text';
+        icon.classList.toggle('fa-eye',       visivel);
+        icon.classList.toggle('fa-eye-slash', !visivel);
+    }
+</script>
 
 @endsection

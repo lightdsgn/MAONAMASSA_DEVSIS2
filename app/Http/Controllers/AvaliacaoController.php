@@ -23,7 +23,9 @@ class AvaliacaoController extends Controller
             $avaliacoesQuery->where('usuario_id', $user->id);
         }
 
-        $avaliacoes = $avaliacoesQuery->orderByDesc('created_at')->get();
+        $avaliacoes = $avaliacoesQuery
+    ->orderByDesc('created_at')
+    ->paginate(10);
 
         // --- Agendamentos pendentes de avaliação (apenas para clientes) ---
         $agendamentosPendentes = collect();

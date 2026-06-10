@@ -190,6 +190,35 @@
     .metric-label { font-size: 0.68rem; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
     .metric-val   { font-size: 1.5rem; font-weight: 900; color: #111; line-height: 1; }
 
+    .chart-card{
+    background:#fff;
+    border-radius:14px;
+    border:1.5px solid #f0f0f0;
+    padding:20px;
+    min-height:380px;
+}
+
+.chart-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+    margin-bottom:28px;
+}
+
+.chart-grid-bottom{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-bottom:28px;
+}
+
+@media(max-width:991px){
+    .chart-grid,
+    .chart-grid-bottom{
+        grid-template-columns:1fr;
+    }
+}
+
     @keyframes fadeUp {
         from { opacity: 0; transform: translateY(14px); }
         to   { opacity: 1; transform: translateY(0); }
@@ -217,22 +246,139 @@
     </div>
 
     @if(Auth::user()->isAdm())
-        @php
-            $adms       = \App\Models\Usuario::where('tipo','adm')->count();
-            $prestadores= \App\Models\Usuario::where('tipo','prestador')->count();
-            $clientes   = \App\Models\Usuario::where('tipo','cliente')->count();
-            $total      = $adms + $prestadores + $clientes ?: 1;
-            $pagos      = \App\Models\Pagamento::where('status','pago')->count();
-            $pendentes  = \App\Models\Pagamento::where('status','pendente')->count();
-            $avaliacoes = \App\Models\Avaliacao::with('servico.usuario')->orderByDesc('nota')->latest()->take(4)->get();
-        @endphp
+      
 
-        <div class="stat-grid">
-            <div class="stat-card d1"><div class="stat-icon orange"><i class="bi bi-people-fill"></i></div><div><div class="stat-num">{{ \App\Models\Usuario::count() }}</div><div class="stat-label">Usuários</div></div></div>
-            <div class="stat-card d2"><div class="stat-icon blue"><i class="bi bi-tools"></i></div><div><div class="stat-num">{{ \App\Models\Servico::count() }}</div><div class="stat-label">Serviços</div></div></div>
-            <div class="stat-card d3"><div class="stat-icon green"><i class="bi bi-clipboard-check"></i></div><div><div class="stat-num">{{ \App\Models\Solicitacao::count() }}</div><div class="stat-label">Solicitações</div></div></div>
-            <div class="stat-card d4"><div class="stat-icon yellow"><i class="bi bi-calendar-check"></i></div><div><div class="stat-num">{{ \App\Models\Agendamento::count() }}</div><div class="stat-label">Agendamentos</div></div></div>
+       <div class="stat-grid">
+
+    <div class="stat-card">
+        <div class="stat-icon orange">
+            <i class="bi bi-people-fill"></i>
         </div>
+        <div>
+            <div class="stat-num">{{ $usuarios }}</div>
+            <div class="stat-label">Usuários</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <i class="bi bi-tools"></i>
+        </div>
+        <div>
+            <div class="stat-num">{{ $servicos }}</div>
+            <div class="stat-label">Serviços</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon green">
+            <i class="bi bi-cash-stack"></i>
+        </div>
+        <div>
+            <div class="stat-num">
+                R$ {{ number_format($faturamentoTotal,0,',','.') }}
+            </div>
+            <div class="stat-label">Faturamento</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon yellow">
+            <i class="bi bi-receipt"></i>
+        </div>
+        <div>
+            <div class="stat-num">
+                R$ {{ number_format($ticketMedio,0,',','.') }}
+            </div>
+            <div class="stat-label">Ticket Médio</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon orange">
+            <i class="bi bi-calendar-check"></i>
+        </div>
+        <div>
+            <div class="stat-num">{{ $agendamentos }}</div>
+            <div class="stat-label">Agendamentos</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <i class="bi bi-clipboard-check"></i>
+        </div>
+        <div>
+            <div class="stat-num">{{ $solicitacoes }}</div>
+            <div class="stat-label">Solicitações</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon green">
+            <i class="bi bi-graph-up-arrow"></i>
+        </div>
+        <div>
+            <div class="stat-num">{{ $taxaConversao }}%</div>
+            <div class="stat-label">Conversão</div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon yellow">
+            <i class="bi bi-wallet2"></i>
+        </div>
+        <div>
+            <div class="stat-num">
+                R$ {{ number_format($faturamentoMes,0,',','.') }}
+            </div>
+            <div class="stat-label">Mês Atual</div>
+        </div>
+    </div>
+
+</div>
+<div class="chart-grid">
+
+    <div class="chart-card">
+        {!! $faturamentoChart->container() !!}
+    </div>
+
+    <div class="chart-card">
+        {!! $statusChart->container() !!}
+    </div>
+
+</div>
+
+<div class="chart-grid-bottom">
+
+    <div class="chart-card">
+        {!! $usuariosChart->container() !!}
+    </div>
+
+    <div class="chart-card">
+
+        <h5 style="font-weight:800;margin-bottom:20px;">
+            Distribuição de Usuários
+        </h5>
+
+        <div class="metric-box">
+            <div class="metric-label">Clientes</div>
+            <div class="metric-val">{{ $clientes }}</div>
+        </div>
+
+        <div class="metric-box">
+            <div class="metric-label">Prestadores</div>
+            <div class="metric-val">{{ $prestadores }}</div>
+        </div>
+
+        <div class="metric-box">
+            <div class="metric-label">Administradores</div>
+            <div class="metric-val">{{ $administradores }}</div>
+        </div>
+
+    </div>
+
+</div>
 
         <div class="cards-grid">
             <div class="dash-card d1">
@@ -403,4 +549,11 @@
     @endif
 
 </div>
+<script src="{{ $faturamentoChart->cdn() }}"></script>
+
+{{ $faturamentoChart->script() }}
+
+{{ $statusChart->script() }}
+
+{{ $usuariosChart->script() }}
 @endsection

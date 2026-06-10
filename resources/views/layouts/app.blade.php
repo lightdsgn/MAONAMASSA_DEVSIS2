@@ -330,7 +330,7 @@
                     <a href="{{ route('perfil') }}" class="dropdown-item-custom">
                         <i class="fa-solid fa-user-pen"></i> Editar Perfil
                     </a>
-                    <a href="{{ route('perfil') }}" class="dropdown-item-custom">
+                    <a href="{{ route('configuracoes') }}" class="dropdown-item-custom">
                         <i class="fa-solid fa-gear"></i> Configurações
                     </a>
                     <form action="{{ route('logout') }}" method="POST">
@@ -371,6 +371,9 @@
             <div class="sb-label">Geral</div>
             <a href="{{ route('perfil') }}" class="sb-link {{ request()->is('perfil*') ? 'active' : '' }}" data-tooltip="Meu Perfil">
                 <i class="fa fa-circle-user sb-icon"></i><span class="sb-text">Meu Perfil</span>
+            </a>
+            <a href="{{ route('configuracoes') }}" class="sb-link {{ request()->is('configuracoes*') ? 'active' : '' }}" data-tooltip="Configurações">
+                <i class="fa fa-gear sb-icon"></i><span class="sb-text">Configurações</span>
             </a>
 
             @if(Auth::user()->isCliente())

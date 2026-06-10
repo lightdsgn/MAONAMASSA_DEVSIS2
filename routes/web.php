@@ -10,7 +10,8 @@ use App\Http\Controllers\OrcamentoController;
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\AvaliacaoController;
 use App\Http\Controllers\PagamentoController;
-
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ConfiguracaoController;
 // ---------------------------------------------------
 // Páginas públicas
 // ---------------------------------------------------
@@ -37,9 +38,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 // ---------------------------------------------------
 Route::middleware('auth')->group(function () {
 
-    // Dashboard
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');
 
+
+
+
+Route::get('/configuracoes', [ConfiguracaoController::class, 'index'])
+    ->name('configuracoes');
     // Perfil
     Route::get('/perfil', [UsuarioController::class, 'perfil'])->name('perfil');
     Route::put('/perfil', [UsuarioController::class, 'atualizarPerfil'])->name('perfil.atualizar');

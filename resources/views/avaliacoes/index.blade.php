@@ -176,6 +176,40 @@
         .dash { padding: 16px; }
         .avaliacoes-grid, .pendentes-grid { grid-template-columns: 1fr; }
     }
+    .pagination-wrap {
+    margin-top: 20px;
+}
+
+.pagination-wrap .pagination {
+    gap: 4px;
+}
+
+.pagination-wrap .page-link {
+    border-radius: 8px !important;
+    border: 1.5px solid #ececec;
+    color: #666;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'Sora', sans-serif;
+    padding: 6px 12px;
+    transition: all 0.2s;
+}
+
+.pagination-wrap .page-link:hover {
+    border-color: #fa4101;
+    color: #fa4101;
+    background: #fff8f5;
+}
+
+.pagination-wrap .page-item.active .page-link {
+    background: #fa4101;
+    border-color: #fa4101;
+    color: #fff;
+}
+
+.pagination-wrap .page-item.disabled .page-link {
+    opacity: .4;
+}
 </style>
 
 <div class="dash">
@@ -314,6 +348,11 @@
         </div>
         @endforelse
     </div>
+    @if($avaliacoes->hasPages())
+<div class="pagination-wrap">
+    {{ $avaliacoes->links() }}
+</div>
+@endif
 
 </div>
 @endsection
