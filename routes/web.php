@@ -16,7 +16,7 @@ use App\Http\Controllers\PagamentoController;
 // ---------------------------------------------------
 Route::get('/', fn() => view('home'))->name('home');
 
-// Leitura pública de serviços e produtos (visitantes podem navegar)
+
 Route::get('/servicos',          [ServicoController::class, 'index'])->name('servicos.index');
 Route::get('/produtos',          [ProdutoController::class, 'index'])->name('produtos.index');
 
@@ -59,7 +59,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/produtos/{produto}',  [ProdutoController::class, 'destroy'])->name('produtos.destroy');
 
     // Solicitações
-    Route::resource('solicitacoes', SolicitacaoController::class);
+Route::resource('solicitacoes', SolicitacaoController::class)
+    ->parameters(['solicitacoes' => 'solicitacao']);
 
     // Orçamentos
     Route::resource('orcamentos', OrcamentoController::class);

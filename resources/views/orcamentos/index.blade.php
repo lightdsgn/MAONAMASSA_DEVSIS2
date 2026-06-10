@@ -250,15 +250,15 @@
 
                 <div class="orc-meta">
                     <div class="orc-meta-item">
-                        <i class="fa-solid fa-person-gear"></i>
+       
                         <div class="prestador-row">
                             <div class="p-avatar">{{ strtoupper(substr($orc->usuario->nome, 0, 1)) }}</div>
                             <strong>{{ Str::limit($orc->usuario->nome, 20) }}</strong>
                         </div>
                     </div>
                     <div class="orc-meta-item">
-                        <i class="fa-solid fa-tools"></i>
-                        <span>M.O.: <strong>R$ {{ number_format($orc->mao_de_obra, 2, ',', '.') }}</strong></span>
+                        
+                        <span>Mão de Obra: <strong>R$ {{ number_format($orc->mao_de_obra, 2, ',', '.') }}</strong></span>
                     </div>
                 </div>
 

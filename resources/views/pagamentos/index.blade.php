@@ -228,10 +228,10 @@
                 default                                    => 'transferencia',
             };
             $metodoIcon = match($metodoSlug) {
-                'pix'          => 'bi-lightning-charge-fill',
-                'cartao'       => 'bi-credit-card-2-front',
-                'dinheiro'     => 'bi-cash-coin',
-                default        => 'bi-arrow-left-right',
+                'pix'          => 'fa-brands fa-pix',
+                'cartao'       => 'fa-credit-card',
+                'dinheiro'     => 'fa-money-bill',
+                default        => 'fa-exchange-alt',
             };
         @endphp
         <div class="pag-card d{{ ($i % 6) + 1 }}">
@@ -250,11 +250,11 @@
 
                 <div class="pag-meta">
                     <div class="pag-meta-item">
-                        <i class="fa-solid fa-person"></i>
+                        
                         <span>Cliente: <strong>{{ $pag->agendamento->cliente->nome }}</strong></span>
                     </div>
                     <div class="pag-meta-item">
-                        <i class="fa-solid fa-person-gear"></i>
+                        
                         <span>Prestador: <strong>{{ $pag->agendamento->servico->usuario->nome }}</strong></span>
                     </div>
                 </div>
@@ -271,7 +271,7 @@
                             {{ \Carbon\Carbon::parse($pag->data_pagamento)->format('d/m/Y') }}
                         </div>
                         @else
-                        <div class="data-pgto"><i class="fa-solid fa-calendar-x"></i> Sem data</div>
+                        <div class="data-pgto">Sem data</div>
                         @endif
                     </div>
                     <div class="metodo-badge metodo-{{ $metodoSlug }}">
