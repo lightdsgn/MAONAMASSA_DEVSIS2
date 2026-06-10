@@ -66,7 +66,7 @@
                         <label class="form-label">Foto de Perfil</label>
                         <div class="avatar-wrap">
                             @if($usuario->foto)
-                                <img src="{{ asset('storage/'.$usuario->foto) }}" class="avatar-img" alt="">
+                                <img src="{{ $usuario->foto }}" class="avatar-img" alt="">
                             @else
                                 <div class="avatar-initials">{{ strtoupper(substr($usuario->nome, 0, 1)) }}</div>
                             @endif

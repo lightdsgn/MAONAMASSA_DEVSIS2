@@ -67,7 +67,7 @@
                 <div class="profile-banner"></div>
                 <div class="profile-body">
                     @if($usuario->foto)
-                        <img src="{{ asset('storage/'.$usuario->foto) }}" class="profile-avatar" alt="">
+                        <img src="{{ $usuario->foto }}" class="profile-avatar" alt="">
                     @else
                         <div class="profile-initials">{{ strtoupper(substr($usuario->nome, 0, 1)) }}</div>
                     @endif

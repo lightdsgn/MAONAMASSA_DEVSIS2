@@ -34,10 +34,12 @@ class DatabaseSeeder extends Seeder
         // 1. USUÁRIOS PADRÃO (emails e senhas intocados)
         // ----------------------------------------------------------------
 
+        $admPassword = Hash::make('admin!maonamassa');
         $adm = Usuario::create([
             'nome'          => 'Administrador',
             'email'         => 'admin@maonamassa.com.br',
-            'password'      => Hash::make('admin!maonamassa'),
+            'password'      => $admPassword,
+            'foto'          => 'https://robohash.org/' . md5($admPassword) . '?set=set1&size=200x200',
             'tipo'          => 'adm',
             'telefone'      => '(49) 99999-0000',
             'tipo_pessoa'   => 'fisico',
@@ -55,10 +57,12 @@ class DatabaseSeeder extends Seeder
             'estado'        => 'SC',
         ]);
 
+        $clientePassword = Hash::make('cliente!maonamassa');
         $clientePadrao = Usuario::create([
             'nome'          => 'Cliente Padrão',
             'email'         => 'cliente@maonamassa.com.br',
-            'password'      => Hash::make('cliente!maonamassa'),
+            'password'      => $clientePassword,
+            'foto'          => 'https://robohash.org/' . md5($clientePassword) . '?set=set1&size=200x200',
             'tipo'          => 'cliente',
             'telefone'      => '(49) 99111-1111',
             'tipo_pessoa'   => 'fisico',
@@ -76,10 +80,12 @@ class DatabaseSeeder extends Seeder
             'estado'        => 'SC',
         ]);
 
+        $prestadorPassword = Hash::make('prestador!maonamassa');
         $prestadorPadrao = Usuario::create([
             'nome'          => 'Prestador Padrão',
             'email'         => 'prestador@maonamassa.com.br',
-            'password'      => Hash::make('prestador!maonamassa'),
+            'password'      => $prestadorPassword,
+            'foto'          => 'https://robohash.org/' . md5($prestadorPassword) . '?set=set1&size=200x200',
             'tipo'          => 'prestador',
             'telefone'      => '(49) 99222-2222',
             'tipo_pessoa'   => 'fisico',
@@ -132,10 +138,12 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($nomesPrestadores as $idx => [$nome, $email, $tipoPessoa, $cpfCnpj, $razaoSocial, $fantasia, $esp]) {
+            $prestPassword = Hash::make('password');
             $prestadores[] = Usuario::create([
                 'nome'          => $nome,
                 'email'         => $email,
-                'password'      => Hash::make('password'),
+                'password'      => $prestPassword,
+                'foto'          => 'https://robohash.org/' . md5($prestPassword) . '?set=set1&size=200x200',
                 'tipo'          => 'prestador',
                 'telefone'      => $telefonesFixos[$idx],
                 'tipo_pessoa'   => $tipoPessoa,
@@ -176,10 +184,12 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($nomesClientes as $i => [$nome, $email, $cpf, $telefone]) {
+            $clientPassword = Hash::make('password');
             $clientes[] = Usuario::create([
                 'nome'          => $nome,
                 'email'         => $email,
-                'password'      => Hash::make('password'),
+                'password'      => $clientPassword,
+                'foto'          => 'https://robohash.org/' . md5($clientPassword) . '?set=set1&size=200x200',
                 'tipo'          => 'cliente',
                 'telefone'      => $telefone,
                 'tipo_pessoa'   => 'fisico',

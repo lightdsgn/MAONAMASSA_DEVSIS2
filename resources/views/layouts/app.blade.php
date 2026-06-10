@@ -64,6 +64,13 @@
             background: #fff; display: flex; align-items: center; justify-content: center;
             font-weight: 700; font-size: 11px; color: #fa4101; letter-spacing: -0.5px;
         }
+        .user-avatar-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
         .user-chip-name { color: #fff; font-size: 0.82rem; font-weight: 600; }
         .user-tipo-badge {
             background: rgba(255,255,255,0.2); color: #fff;
@@ -315,9 +322,13 @@
             </a>
 
             <div class="user-chip" id="userChip">
-                <div class="user-avatar">
-                    {{ strtoupper(substr(Auth::user()->nome, 0, 1)) }}{{ strtoupper(substr(strstr(Auth::user()->nome, ' '), 1, 1)) }}
-                </div>
+                @if(Auth::user()->foto)
+                    <img src="{{ Auth::user()->foto }}" class="user-avatar-img" alt="Foto">
+                @else
+                    <div class="user-avatar">
+                        {{ strtoupper(substr(Auth::user()->nome, 0, 1)) }}{{ strtoupper(substr(strstr(Auth::user()->nome, ' '), 1, 1)) }}
+                    </div>
+                @endif
                 <span class="user-chip-name d-none d-sm-inline">{{ Auth::user()->nome }}</span>
                 <span class="user-tipo-badge d-none d-md-inline">{{ strtoupper(Auth::user()->tipo) }}</span>
                 <i class="bi bi-chevron-down user-chevron"></i>

@@ -88,7 +88,7 @@
                         <label class="form-label">Foto</label>
                         @if($usuario->foto)
                             <div class="mb-2">
-                                <img src="{{ asset('storage/' . $usuario->foto) }}" height="60" class="rounded border">
+                                <img src="{{ $usuario->foto }}" height="60" class="rounded border">
                                 <small class="text-muted ms-2">Envie outra para substituir</small>
                             </div>
                         @endif

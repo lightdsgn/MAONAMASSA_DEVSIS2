@@ -193,7 +193,7 @@
                         <td>
                             <div class="user-cell">
                                 @if($usuario->foto)
-                                    <img src="{{ asset('storage/'.$usuario->foto) }}" class="user-photo" alt="">
+                                    <img src="{{ $usuario->foto }}" class="user-photo" alt="">
                                 @else
                               
                                 @endif

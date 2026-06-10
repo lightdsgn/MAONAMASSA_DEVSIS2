@@ -26,6 +26,17 @@ class Usuario extends Authenticatable
         return ['password' => 'hashed'];
     }
 
+    // ---------- accessors ----------
+    public function getFotoAttribute($value)
+    {
+        if (!$value) return null;
+        if (strpos($value, 'http') === 0) {
+            return $value;
+        }
+        
+        return asset('storage/' . $value);
+    }
+
     // ---------- helpers de tipo ----------
     public function isAdm(): bool      { return $this->tipo === 'adm'; }
     public function isPrestador(): bool { return $this->tipo === 'prestador'; }
