@@ -176,7 +176,13 @@
     .pagination-wrap .page-link:hover { border-color: #fa4101; color: #fa4101; background: #fff8f5; }
     .pagination-wrap .page-item.active .page-link { background: #fa4101; border-color: #fa4101; color: #fff; }
     .pagination-wrap .page-item.disabled .page-link { opacity: 0.4; }
-
+select.search-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23aaa' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+}
     @keyframes fadeUp {
         from { opacity:0; transform:translateY(16px); }
         to   { opacity:1; transform:translateY(0); }
@@ -195,10 +201,37 @@
     <div class="page-header">
         <h4 class="page-title"><i class="fa-solid fa-credit-card"></i> Pagamentos</h4>
         @if(Auth::user()->isAdm() || Auth::user()->isPrestador())
-        <a href="{{ route('pagamentos.create') }}" class="btn-dash-fill">
-            <i class="fa-solid fa-circle-plus"></i> Registrar Pagamento
-        </a>
+<div class="d-flex align-items-center gap-2 flex-wrap">
+    <a href="{{ route('pagamentos.create') }}" class="btn-dash-fill">
+        <i class="fa-solid fa-circle-plus"></i> Registrar Pagamento
+    </a>
+
+    {{-- Formulário de relatório PDF --}}
+    <form method="GET" action="{{ route('pagamentos.relatorio') }}"
+          class="d-flex align-items-center gap-2 flex-wrap">
+        <input type="date" name="inicio" class="search-input" style="width:150px"
+               value="{{ request('inicio') }}" placeholder="Início">
+        <input type="date" name="fim" class="search-input" style="width:150px"
+               value="{{ request('fim') }}" placeholder="Fim">
+
+        @if(Auth::user()->isAdm())
+        <select name="prestador_id" class="search-input" style="width:180px">
+            <option value="">Todos os prestadores</option>
+           @foreach(\App\Models\Usuario::where('tipo','prestador')->orderBy('nome')->get() as $p)
+
+                <option value="{{ $p->id }}" {{ request('prestador_id') == $p->id ? 'selected' : '' }}>
+                    {{ $p->nome }}
+                </option>
+            @endforeach
+        </select>
         @endif
+
+        <button type="submit" class="btn-dash-fill">
+            <i class="fa-solid fa-file-pdf"></i> Gerar PDF
+        </button>
+    </form>
+</div>
+@endif
     </div>
 
     <form method="GET" action="{{ route('pagamentos.index') }}" class="search-bar">

@@ -20,7 +20,9 @@ Route::get('/', fn() => view('home'))->name('home');
 
 Route::get('/servicos',          [ServicoController::class, 'index'])->name('servicos.index');
 Route::get('/produtos',          [ProdutoController::class, 'index'])->name('produtos.index');
-
+    Route::get('/pagamentos/pdf', [PagamentoController::class, 'relatorioPDF'])
+    ->name('pagamentos.relatorio');
+    
 // ---------------------------------------------------
 // Autenticação
 // ---------------------------------------------------
@@ -86,6 +88,7 @@ Route::resource('solicitacoes', SolicitacaoController::class)
 
     // Pagamentos
     Route::resource('pagamentos', PagamentoController::class);
+
 
     // Área ADM — CRUD completo de usuários
     Route::middleware('tipo:adm')->group(function () {

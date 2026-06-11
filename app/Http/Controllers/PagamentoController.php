@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pagamento;
 use App\Models\Agendamento;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PagamentoController extends Controller
 {
@@ -125,4 +126,66 @@ class PagamentoController extends Controller
             abort(403, 'Acesso negado.');
         }
     }
+
+   public function relatorioPDF(Request $request)
+{
+    $inicio    = $request->inicio;
+    $fim       = $request->fim;
+    $prestador = $request->prestador_id;
+
+    $query = Pagamento::with([
+        'agendamento.servico.usuario',
+        
+        'agendamento.cliente'
+    ]);
+
+    if ($prestador) {
+        $query->whereHas('agendamento.servico', function ($q) use ($prestador) {
+            $q->where('usuario_id', $prestador);
+        });
+    }
+
+    if ($inicio && $fim) {
+        $query->whereBetween('data_pagamento', [$inicio, $fim]);
+    } else {
+        $query->whereMonth('data_pagamento', now()->month)
+              ->whereYear('data_pagamento', now()->year);
+    }
+
+    $pagamentos = $query->orderBy('data_pagamento', 'desc')->get();
+
+    $totalPagamentos = $pagamentos->count();
+    $valorTotal      = $pagamentos->sum('valor');
+
+    $porStatus = $pagamentos->groupBy('status')->map(fn($g) => [
+        'qtd'   => $g->count(),
+        'total' => $g->sum('valor'),
+    ]);
+
+    $porMetodo = $pagamentos->groupBy('metodo')->map(fn($g) => [
+        'qtd'   => $g->count(),
+        'total' => $g->sum('valor'),
+    ]);
+
+    $porPrestador = $pagamentos
+        ->groupBy(fn($p) => $p->agendamento->servico->usuario->nome ?? 'Sem prestador')
+        ->map(fn($g) => ['qtd' => $g->count(), 'total' => $g->sum('valor')])
+        ->sortByDesc('total');
+
+    // Agrupamento por categoria do serviço
+    $porCategoria = $pagamentos
+        ->groupBy(fn($p) => $p->agendamento->servico->categoria->nome ?? 'Sem categoria')
+        ->map(fn($g) => ['qtd' => $g->count(), 'total' => $g->sum('valor')])
+        ->sortByDesc('total');
+$dompdf = app('dompdf.wrapper');
+$dompdf->getDomPDF()->getOptions()->setChroot(base_path());
+
+$pdf = Pdf::loadView('pagamentos.pdf', compact(
+    'pagamentos', 'totalPagamentos', 'valorTotal',
+    'porStatus', 'porMetodo', 'porPrestador', 'inicio', 'fim'
+));
+
+    return $pdf->download('relatorio_pagamentos.pdf');
+}
+
 }

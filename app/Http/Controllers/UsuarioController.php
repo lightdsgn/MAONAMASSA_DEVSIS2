@@ -51,7 +51,8 @@ class UsuarioController extends Controller
             'cpf_cnpj'   => 'nullable|string|max:18|unique:usuarios',
         ]);
 
-        $data = $request->except(['password', 'password_confirmation', 'foto']);
+        $data = $request->except(['password', 'password_confirmation', 'foto', '_token', '_method']);
+
         $data['password'] = Hash::make($request->password);
 
         if ($request->hasFile('foto')) {
@@ -87,7 +88,8 @@ class UsuarioController extends Controller
             'cpf_cnpj'   => 'nullable|string|max:18|unique:usuarios,cpf_cnpj,' . $usuario->id,
         ]);
 
-        $data = $request->except(['password', 'password_confirmation', 'foto']);
+        $data = $request->except(['password', 'password_confirmation', 'foto', '_token', '_method']);
+
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
