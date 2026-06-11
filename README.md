@@ -4,7 +4,7 @@ Plataforma para conectar **clientes** a **prestadores de serviço**, desenvolvid
 
 ---
 
-## 🚀 Instalação
+## Instalação
 
 ### Pré-requisitos
 - PHP >= 8.3
@@ -50,13 +50,25 @@ Acesse: **http://localhost:8000**
 | Campo | Valor |
 |-------|-------|
 | E-mail | admin@maonamassa.com.br |
-| Senha | admin123 |
+| Senha | admin!maonamassa |
+
+### Usuário cliente padrão
+| Campo | Valor |
+|-------|-------|
+| E-mail | cliente@maonamassa.com.br |
+| Senha | cliente!maonamassa |
+
+### Usuário prestador padrão
+| Campo | Valor |
+|-------|-------|
+| E-mail | prestador@maonamassa.com.br |
+| Senha | prestador!maonamassa |
 
 > ⚠️ Altere a senha do admin após o primeiro acesso!
 
 ---
 
-## 🗄️ Banco de Dados
+## Banco de Dados
 
 ### Tabela central: `usuarios`
 
@@ -95,7 +107,7 @@ agendamentos (1) ──── pagamento (1)
 
 ---
 
-## 🔐 Autenticação e Autorização
+##  Autenticação e Autorização
 
 ### Tipos de usuário
 | Tipo | Pode fazer |
